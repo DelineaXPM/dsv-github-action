@@ -36,7 +36,7 @@ func createDirectories() error {
 }
 
 // Init runs multiple tasks to initialize all the requirements for running a project for a new contributor.
-func Init() error { //nolint:deadcode // Not dead, it's alive.
+func Init() error {
 	pterm.DefaultHeader.Println("running Init()")
 
 	mg.SerialDeps(
