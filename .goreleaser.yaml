@@ -52,13 +52,12 @@ dockers:
     goarch: amd64
     goarm: ''
     goamd64: v2
-
     image_templates:
       - '{{ .Env.DOCKER_ORG }}/{{ .ProjectName }}:{{ .Tag }}'
       - '{{ .ProjectName }}:{{ .Tag }}'
       - '{{ .ProjectName }}:latest' # This one is for dev usage so latest version, no tagged semver required in docker compose or local testing
     skip_push: 'true'
-    dockerfile: ./Dockerfile.scratch
+    dockerfile: ./Dockerfile.distroless
     use: buildx
     build_flag_templates:
       - --platform=linux/amd64
