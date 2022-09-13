@@ -55,7 +55,7 @@ dockers:
       - '{{ .Env.DOCKER_ORG }}/{{ .ProjectName }}:{{ .Tag }}'
       - '{{ .ProjectName }}:{{ .Tag }}'
       - '{{ .ProjectName }}:latest' # This one is for dev usage so latest version, no tagged semver required in docker compose or local testing
-    skip_push: 'true'
+    skip_push: false
     dockerfile: ./docker/Dockerfile.distroless
     use: buildx
     build_flag_templates:
