@@ -1,0 +1,68 @@
+---
+project_name: dsv-github-action
+dist: .artifacts/goreleaser
+env:
+  - GITHUB_TOKEN=''
+  - GITLAB_TOKEN=''
+  - GITEA_TOKEN=''
+  - LOCAL_DEBUGGING=false # set to make this quick and bypass extra effort builds like archiving zip
+  - CGO_ENABLED=0
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - id: dsv-github-action
+    binary: dsv-github-action
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    ldflags:
+      - -s -w
+      - -X thy/version.Version={{ .Summary }}
+      - -X thy/version.GitCommit={{ .FullCommit }}
+      - -X thy/version.BuildDate={{ .Timestamp }}
+    goos: [linux]
+    goarch:
+      - amd64
+archives:
+  - id: replacements
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+  - id: binaries
+    format: binary
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+  disable: false
+snapshot:
+  name_template: '{{ incpatch .Version }}-next'
+changelog:
+  skip: false
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+dockers:
+  - goos: linux
+    goarch: amd64
+    goarm: ''
+    goamd64: v2
+    image_templates:
+      - '{{ .Env.DOCKER_ORG }}/{{ .ProjectName }}:{{ .Tag }}'
+      - '{{ .ProjectName }}:{{ .Tag }}'
+      - '{{ .ProjectName }}:latest' # This one is for dev usage so latest version, no tagged semver required in docker compose or local testing
+    skip_push: 'true'
+    dockerfile: ./Dockerfile.distroless
+    use: buildx
+    build_flag_templates:
+      - --platform=linux/amd64
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.title={{ .ProjectName }}
+      - --label=org.opencontainers.image.revision={{ .FullCommit }}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.version="{{ .Tag }}"

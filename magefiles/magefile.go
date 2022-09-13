@@ -4,7 +4,7 @@ package main
 import (
 	"os"
 
-	"github.com/DelineaXPM/REPLACEME/magefiles/constants"
+	"github.com/DelineaXPM/dsv-github-action/magefiles/constants"
 
 	"github.com/magefile/mage/mg"
 	"github.com/pterm/pterm"
@@ -36,16 +36,19 @@ func createDirectories() error {
 }
 
 // Init runs multiple tasks to initialize all the requirements for running a project for a new contributor.
-func Init() error { //nolint:deadcode // Not dead, it's alive.
+func Init() error {
 	pterm.DefaultHeader.Println("running Init()")
-
 	mg.SerialDeps(
 		Clean,
 		createDirectories,
-		(gotools.Go{}.Tidy),
-		(gotools.Go{}.Init),
 	)
 
+	mg.Deps(
+		(gotools.Go{}.Tidy),
+	)
+	if err := tooling.SilentInstallTools(CIToolList); err != nil {
+		return err
+	}
 	if ci.IsCI() {
 		pterm.Debug.Println("CI detected, done with init")
 		return nil
@@ -57,6 +60,7 @@ func Init() error { //nolint:deadcode // Not dead, it's alive.
 	}
 	// These can run in parallel as different toolchains.
 	mg.Deps(
+		(gotools.Go{}.Init),
 		(gittools.Gittools{}.Init),
 		(precommit.Precommit{}.Init),
 	)
