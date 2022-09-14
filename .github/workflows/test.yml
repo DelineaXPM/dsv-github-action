@@ -8,7 +8,11 @@ on:
     tags:
       - v*
   workflow_dispatch:
-
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -18,18 +22,18 @@ jobs:
 
       # https://github.com/magnetikonline/action-golang-cache
       - name: Setup Golang with cache
-        uses: magnetikonline/action-golang-cache@v3
+        uses: magnetikonline/action-golang-cache@09043845c4b214830a4ae9eb6f5c61d3d3fd37b0 # renovate: tag=v3
         with:
           go-version-file: go.mod
 
       - name: mage-tidy
-        uses: magefile/mage-action@v2
+        uses: magefile/mage-action@5f7a9a23cfef763949ca41834b868167adbd1b59 # renovate: tag=v2
         with:
           version: latest
           args: go:tidy
 
       - name: mage-test
-        uses: magefile/mage-action@v2
+        uses: magefile/mage-action@5f7a9a23cfef763949ca41834b868167adbd1b59 # renovate: tag=v2
         with:
           version: latest
           args: go:testsum ./...
