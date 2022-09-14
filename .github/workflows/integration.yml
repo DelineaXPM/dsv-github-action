@@ -1,0 +1,60 @@
+---
+name: integration
+on:
+  # pull_request:
+  # push:
+  #   branches:
+  #     - main
+  #   tags:
+  #     - v*
+  workflow_dispatch:
+    inputs:
+      setenv:
+        description: setenv (output to envfile)
+        default: true
+        type: boolean
+# permissions:
+#   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v3
+      - id: dsv
+        uses: delineaxpm/dsv-github-action@main # renovate: tag=v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          domain: ${{ secrets.DSV_SERVER }}
+          clientId: ${{ secrets.DSV_CLIENT_ID }}
+          clientSecret: ${{ secrets.DSV_CLIENT_SECRET }}
+          setEnv: true
+          retrieve: |
+            [
+             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"},
+             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value2", "outputVariable": "RETURN_VALUE_2"}
+            ]
+      - name: validate-first-value
+        if: always()
+        run: |
+          if [ "${{ steps.dsv.outputs.RETURN_VALUE_1 }}" == "${{ secrets.DSV_EXPECTED_VALUE_1 }}" ]; then
+              echo "✅ test value is matched"
+              exit 0
+          else
+              echo "::error ❌ mismatch, failed to return test value"
+              exit 1
+          fi
+      - name: validate-second-value
+        if: always()
+        run: |
+          if [ "${{ steps.dsv.outputs.RETURN_VALUE_2 }}" == "${{ secrets.DSV_EXPECTED_VALUE_2 }}" ]; then
+              echo "✅ test value is matched"
+              exit 0
+          else
+              echo -e "::error ❌ mismatch, failed to return test value"
+              exit 1
+          fi

@@ -1,0 +1,42 @@
+---
+name: secret-vault-github-action-plugin
+description: Delinea DevOps Secrets Vault (DSV) GitHub Actions Plugin allows you to access and reference your Secrets data available for use in GitHub Actions
+
+inputs:
+  domain:
+    required: true
+    description: |
+      The dsv domain qualified by region.
+
+      Example: `mytenant.secretsvaultcloud.com`
+
+      - secretsvaultcloud.com
+      - secretsvaultcloud.eu
+      - secretsvaultcloud.com.au
+      - secretsvaultcloud.ca
+  clientId:
+    description: The generated clientID for authenticating. This should be saved as a github action secret in the repository or org.
+    required: true
+  clientSecret:
+    description: The generated clientSecret for authenticating. This should be saved as a github action secret in the repository or org.
+    required: true
+  setEnv:
+    description: Default true. This will write the resulting secrets using the envfile.
+    required: true
+  retrieve:
+    description: |
+      Formatted as: <path> <key> as <outputAlias>
+      This is the secrets to retrieve and the resulting secret variable that others steps should be able to use.
+    required: true
+runs:
+  using: docker
+  # image docs: https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsimage
+  # using prebuilt docker image to require no building of app
+  # image: Dockerfile
+  image: docker://delineaxpm/dsv-github-action:latest
+  env:
+    DSV_DOMAIN: ${{ inputs.domain }}
+    DSV_CLIENT_ID: ${{ inputs.clientId }}
+    DSV_CLIENT_SECRET: ${{ inputs.clientSecret }}
+    DSV_SET_ENV: ${{ inputs.setEnv }}
+    DSV_RETRIEVE: ${{ inputs.retrieve }}
