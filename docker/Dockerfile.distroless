@@ -24,7 +24,5 @@
 
 
 FROM gcr.io/distroless/static:nonroot
-
-COPY dsv-github-action /
-
-ENTRYPOINT [ "/dsv-github-action" ]
+COPY dsv-github-action /app/dsv-github-action
+ENTRYPOINT [ "/app/dsv-github-action" ]
