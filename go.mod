@@ -3,9 +3,11 @@ module github.com/DelineaXPM/dsv-github-action
 go 1.19
 
 require (
+	github.com/caarlos0/env/v6 v6.10.1
 	github.com/magefile/mage v1.13.0
-	github.com/pterm/pterm v0.12.45
+	github.com/pterm/pterm v0.12.46
 	github.com/sheldonhull/magetools v0.0.12
+	golang.org/x/tools v0.0.0-20191119224855-298f0cb1881e
 )
 
 require (
@@ -20,6 +22,7 @@ require (
 	github.com/itchyny/timefmt-go v0.1.3 // indirect
 	github.com/lithammer/fuzzysearch v1.1.5 // indirect
 	github.com/logrusorgru/aurora v2.0.3+incompatible // indirect
+	github.com/matryer/is v1.4.0 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/stretchr/testify v1.7.2 // indirect

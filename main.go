@@ -7,20 +7,16 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"path"
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/caarlos0/env/v6"
+	"github.com/pterm/pterm"
 )
 
 // List of environment variables names used as input.
-const (
-	DomainEnv       = "DOMAIN"        // Tenant domain name (e.g. example.secretsvaultcloud.com).
-	ClientIDEnv     = "CLIENT_ID"     // Client ID for authentication.
-	ClientSecretEnv = "CLIENT_SECRET" // Client Secret for authentication.
-	RetrieveEnv     = "RETRIEVE"      // Rows with data to retrieve from DSV in format `<path> <data key> as <output key>`.
-	SetEnvEnv       = "SET_ENV"       // Set env variables. Applicable only for GitHub Actions.
-)
+const ()
 
 // defaultTimeout defines default timeout for HTTP requests.
 const defaultTimeout = time.Second * 5
@@ -28,45 +24,89 @@ const defaultTimeout = time.Second * 5
 // PermissionReadWriteOwner is the octal permission for Read Write for the owner of the file.
 const PermissionReadWriteOwner = 0o600
 
-var (
-	githubCI      = os.Getenv("GITHUB_ACTION") != ""
-	gitlabCI      = os.Getenv("GITLAB_CI") != ""
-	gitlabCIDebug = os.Getenv("GITLAB_CI_DEBUG") != ""
-)
+type config struct {
+	IsCI    bool `env:"GITHUB_ACTION"` // IsCI determines if the system is detecting being in CI system.
+	isDebug bool `env:"RUNNER_DEBUG"`  // IsDebug is based on github action flagging as debug/trace level.
+	SetEnv  bool `env:"SET_ENV"`       // SetEnv is only for GitHub Actions.
+
+	DomainEnv       string `env:"DOMAIN,required"`        // Tenant domain name (e.g. example.secretsvaultcloud.com).
+	ClientIDEnv     string `env:"CLIENT_ID,required"`     // Client ID for authentication.
+	ClientSecretEnv string `env:"CLIENT_SECRET,required"` // Client Secret for authentication.
+	RetrieveEnv     string `env:"RETRIEVE,required"`      // Rows with data to retrieve from DSV in format `<path> <data key> as <output key>`.
+}
+
+// getGithubEnv reads from the current step target github action
+// The path on the runner to the file that sets environment variables from workflow commands.
+// This file is unique to the current step and changes for each step in a job.
+// For example, /home/runner/work/_temp/_runner_file_commands/set_env_87406d6e-4979-4d42-98e1-3dab1f48b13a.
+// For more information, see "Workflow commands for GitHub Actions.".
+func (cfg *config) getGithubEnv() (string, error) {
+	githubenv, isSet := os.LookupEnv("GITHUB_ENV")
+	if !isSet {
+		return "", fmt.Errorf("GITHUB_ENV is not set")
+	}
+	return githubenv, nil
+}
+
+func (cfg *config) sendRequest(c httpClient, req *http.Request, out any) error {
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Delinea-DSV-Client", "github-action")
+	resp, err := c.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("%s %s: %s", req.Method, req.URL, resp.Status)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("could not read response body: %w", err)
+	}
+
+	if err = json.Unmarshal(body, &out); err != nil {
+		return fmt.Errorf("could not unmarshal response body: %w", err)
+	}
+	return nil
+}
+
+// configure Pterm settings for project based on the detected environment.
+func (cfg *config) configureLogging() {
+	pterm.Info.Println("configureLogging()")
+	pterm.Error.Prefix = pterm.Prefix{
+		Text:  "::error::",
+		Style: &pterm.Style{},
+	}
+	pterm.Debug.Prefix = pterm.Prefix{
+		Text:  "::debug::",
+		Style: &pterm.Style{},
+	}
+	if cfg.isDebug {
+		pterm.EnableDebugMessages()
+		pterm.Debug.Println("debug messages have been enabled")
+	}
+}
 
 func main() {
-	switch {
-	case githubCI:
-		info("🐣 Start working with GitHub CI.")
-	case gitlabCI:
-		info("🐣 Start working with GitLab CI.")
-	default:
-		printError(fmt.Errorf("🤡 Unknown CI server"))
-		os.Exit(1)
+	cfg := &config{}
+	if err := env.Parse(&cfg); err != nil {
+		pterm.Error.Printfln("%+v", err)
 	}
 
-	readEnv := func(name string) string {
-		val := os.Getenv(name)
-		if val == "" {
-			printError(fmt.Errorf("environment variable %q is required and cannot be empty", name))
-			os.Exit(1)
-		}
-		return val
-	}
+	cfg.configureLogging()
 
-	domain := readEnv(DomainEnv)
-	clientID := readEnv(ClientIDEnv)
-	clientSecret := readEnv(ClientSecretEnv)
-	retrieve := readEnv(RetrieveEnv)
-	setEnv := (githubCI && os.Getenv(SetEnvEnv) != "") || gitlabCI
+	pterm.Debug.Printfln("%+v", cfg)
 
-	if err := run(domain, clientID, clientSecret, retrieve, setEnv); err != nil {
-		printError(err)
+	if err := run(cfg.DomainEnv, cfg.ClientIDEnv, cfg.ClientSecretEnv, cfg.RetrieveEnv, cfg); err != nil {
+		pterm.Error.Println(err)
 		os.Exit(1)
 	}
 }
 
-func run(domain, clientID, clientSecret, retrieve string, setEnv bool) error {
+func run(domain, clientID, clientSecret, retrieve string, cfg *config) error {
+	var err error
 	retrieveData, err := parseRetrieve(retrieve)
 	if err != nil {
 		return err
@@ -75,54 +115,58 @@ func run(domain, clientID, clientSecret, retrieve string, setEnv bool) error {
 	apiEndpoint := fmt.Sprintf("https://%s/v1", domain)
 	httpClient := &http.Client{Timeout: defaultTimeout}
 
-	info("🔑 Fetching access token...")
-	token, err := dsvGetToken(httpClient, apiEndpoint, clientID, clientSecret)
+	pterm.Info.Println("🔑 Fetching access token")
+	token, err := dsvGetToken(httpClient, apiEndpoint, clientID, clientSecret, cfg)
 	if err != nil {
-		debugf("Authentication failed: %v", err)
+		pterm.Debug.Printfln("Authentication failed: %v", err)
 		return fmt.Errorf("unable to get access token")
 	}
+	var envFile *os.File
 
-	envFile, err := openEnvFile(setEnv)
-	if err != nil {
-		return err
+	// This function will only run if both is CI and SetEnv is detected.
+	if cfg.IsCI && cfg.SetEnv {
+		envFile, err = actionsopenEnvFile(cfg)
+		if err != nil {
+			return err
+		}
+		defer envFile.Close()
 	}
-	defer envFile.Close()
 
-	info("✨ Fetching secret(s) from DSV...")
+	pterm.Info.Println("✨ Fetching secret(s) from DSV")
 
 	for path, dataMap := range retrieveData {
-		debugf("%q: Start processing...", path)
+		pterm.Debug.Printfln("%q: Start processing", path)
 
-		secret, err := dsvGetSecret(httpClient, apiEndpoint, token, path)
+		secret, err := dsvGetSecret(httpClient, apiEndpoint, token, path, cfg)
 		if err != nil {
-			debugf("%q: Failed to fetch secret: %v.", path, err)
+			pterm.Debug.Printfln("%q: Failed to fetch secret: %v", path, err)
 			return fmt.Errorf("unable to get secret")
 		}
 
 		secretData, ok := secret["data"].(map[string]interface{})
 		if !ok {
-			debugf("%q: Cannot get data from secret.", path)
+			pterm.Debug.Printfln("%q: Cannot get data from secret", path)
 			return fmt.Errorf("cannot parse secret")
 		}
 
 		for dataKey, outputKey := range dataMap {
 			val, ok := secretData[dataKey].(string)
 			if !ok {
-				debugf("%q: Key %q not found in data.", path, dataKey)
+				pterm.Debug.Printfln("%q: Key %q not found in data", path, dataKey)
 				return fmt.Errorf("specified field was not found in data")
 			}
-			debugf("%q: Found %q key in data.", path, dataKey)
+			pterm.Debug.Printfln("%q: Found %q key in data", path, dataKey)
 
-			if githubCI {
+			if cfg.IsCI {
 				actionSetOutput(outputKey, val)
-				debugf("%q: Set output %q to value in %q.", path, outputKey, dataKey)
+				pterm.Debug.Printfln("%q: Set output %q to value in %q", path, outputKey, dataKey)
 			}
-			if setEnv {
-				if err := exportVariable(envFile, outputKey, val); err != nil {
-					debugf("%q: Exporting variable error: %v.", path, err)
+			if cfg.IsCI && cfg.SetEnv {
+				if err := actionsExportVariable(envFile, outputKey, val); err != nil {
+					pterm.Debug.Printfln("%q: Exporting variable error: %v", path, err)
 					return fmt.Errorf("cannot set environment variable")
 				}
-				debugf("%q: Set env var %q to value in %q.", path, strings.ToUpper(outputKey), dataKey)
+				pterm.Debug.Printfln("%q: Set env var %q to value in %q", path, strings.ToUpper(outputKey), dataKey)
 			}
 		}
 	}
@@ -174,7 +218,7 @@ type httpClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
-func dsvGetToken(c httpClient, apiEndpoint, cid, csecret string) (string, error) {
+func dsvGetToken(c httpClient, apiEndpoint, cid, csecret string, cfg *config) (string, error) {
 	body := []byte(fmt.Sprintf(
 		`{"grant_type":"client_credentials","client_id":"%s","client_secret":"%s"}`,
 		cid, csecret,
@@ -186,7 +230,7 @@ func dsvGetToken(c httpClient, apiEndpoint, cid, csecret string) (string, error)
 	}
 
 	resp := make(map[string]interface{})
-	if err = sendRequest(c, req, &resp); err != nil {
+	if err = cfg.sendRequest(c, req, &resp); err != nil {
 		return "", fmt.Errorf("API call failed: %w", err)
 	}
 
@@ -197,7 +241,7 @@ func dsvGetToken(c httpClient, apiEndpoint, cid, csecret string) (string, error)
 	return token, nil
 }
 
-func dsvGetSecret(c httpClient, apiEndpoint, accessToken, secretPath string) (map[string]interface{}, error) {
+func dsvGetSecret(c httpClient, apiEndpoint, accessToken, secretPath string, cfg *config) (map[string]interface{}, error) {
 	endpoint := apiEndpoint + "/secrets/" + secretPath
 	req, err := http.NewRequest(http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -207,106 +251,37 @@ func dsvGetSecret(c httpClient, apiEndpoint, accessToken, secretPath string) (ma
 	req.Header.Set("Authorization", accessToken)
 
 	resp := make(map[string]interface{})
-	if err = sendRequest(c, req, &resp); err != nil {
+	if err = cfg.sendRequest(c, req, &resp); err != nil {
 		return nil, fmt.Errorf("API call failed: %w", err)
 	}
 	return resp, nil
-}
-
-func sendRequest(c httpClient, req *http.Request, out any) error {
-	req.Header.Set("Content-Type", "application/json")
-	if githubCI {
-		req.Header.Set("Delinea-DSV-Client", "github-action")
-	} else if gitlabCI {
-		req.Header.Set("Delinea-DSV-Client", "gitlab-job")
-	}
-
-	resp, err := c.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("%s %s: %s", req.Method, req.URL, resp.Status)
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("could not read response body: %w", err)
-	}
-
-	if err = json.Unmarshal(body, &out); err != nil {
-		return fmt.Errorf("could not unmarshal response body: %w", err)
-	}
-	return nil
-}
-
-func debug(s string) {
-	if githubCI {
-		fmt.Printf("::debug::%s\n", s)
-	} else if gitlabCI && gitlabCIDebug {
-		fmt.Printf("##[debug]\x1b[94m%s\x1b[0m\n", s)
-	}
-}
-
-func debugf(format string, args ...interface{}) {
-	debug(fmt.Sprintf(format, args...))
-}
-
-func info(s string) {
-	if githubCI {
-		fmt.Println(s)
-	} else if gitlabCI {
-		fmt.Printf("\x1b[92m%s\x1b[0m\n", s)
-	}
-}
-
-func printError(err error) {
-	if githubCI {
-		fmt.Printf("::error::%v\n", err)
-	} else if gitlabCI {
-		fmt.Printf("\x1b[91m%v\x1b[0m\n", err)
-	}
 }
 
 func actionSetOutput(key, val string) {
 	fmt.Printf("::set-output name=%s::%s\n", key, val)
 }
 
-func openEnvFile(setEnv bool) (*os.File, error) {
+// actionsopenEnvFile is used for writing secrets back in GitHub.
+func actionsopenEnvFile(cfg *config) (*os.File, error) {
 	var (
-		envFile *os.File
-		err     error
+		envFileName string
+		envFile     *os.File
+		err         error
 	)
-	if gitlabCI {
-		jobName := os.Getenv("CI_JOB_NAME")
-		if jobName == "" {
-			return nil, fmt.Errorf("CI_JOB_NAME environment is not defined")
-		}
-		pwd := os.Getenv("CI_PROJECT_PATH")
-		if pwd == "" {
-			return nil, fmt.Errorf("CI_PROJECT_PATH environment is not defined")
-		}
-		envFileName := path.Join("/builds/", pwd, jobName)
-		envFile, err = os.OpenFile(envFileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, PermissionReadWriteOwner)
-		if err != nil {
-			return nil, fmt.Errorf("cannot open file %s: %w", envFileName, err)
-		}
-	} else if githubCI && setEnv {
-		envFileName := os.Getenv("GITHUB_ENV")
-		if envFileName == "" {
-			return nil, fmt.Errorf("GITHUB_ENV environment is not defined")
-		}
-		envFile, err = os.OpenFile(envFileName, os.O_APPEND|os.O_WRONLY, PermissionReadWriteOwner)
-		if err != nil {
-			return nil, fmt.Errorf("cannot open file %s: %w", envFileName, err)
-		}
+
+	envFileName, err = cfg.getGithubEnv()
+	if err != nil {
+		return nil, fmt.Errorf("GITHUB_ENV environment is not defined")
+	}
+
+	envFile, err = os.OpenFile(envFileName, os.O_APPEND|os.O_WRONLY, PermissionReadWriteOwner)
+	if err != nil {
+		return nil, fmt.Errorf("cannot open file %s: %w", envFileName, err)
 	}
 	return envFile, nil
 }
 
-func exportVariable(envFile *os.File, key, val string) error {
+func actionsExportVariable(envFile *os.File, key, val string) error {
 	if _, err := envFile.WriteString(fmt.Sprintf("%s=%s\n", strings.ToUpper(key), val)); err != nil {
 		return fmt.Errorf("could not update %s environment file: %w", envFile.Name(), err)
 	}

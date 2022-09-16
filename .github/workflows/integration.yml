@@ -1,0 +1,34 @@
+---
+name: integration
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Read secrets from DSV
+        id: dsv
+        uses: mariiatuzovska/dsv-ci-plugin@v6.2
+        with:
+          domain: ${{ secrets.DSV_SERVER }}
+          clientId: ${{ secrets.DSV_CLIENT_ID }}
+          clientSecret: ${{ secrets.DSV_CLIENT_SECRET }}
+          setEnv: true
+          retrieve: |
+            ${{ secrets.DSV_SECRET_PATH_ONE }} ${{ secrets.DSV_SECRET_KEY_ONE }} AS myVal1
+            ${{ secrets.DSV_SECRET_PATH_TWO }} ${{ secrets.DSV_SECRET_KEY_TWO }} AS MYVAL2
+      - name: Print secret referencing ID of the step.
+        run: echo ${{ steps.dsv.outputs.myVal1 }}

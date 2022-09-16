@@ -8,6 +8,8 @@ import (
 	"os"
 	"reflect"
 	"testing"
+
+	"github.com/matryer/is"
 )
 
 type MockHTTPClient struct {
@@ -92,6 +94,11 @@ func TestParseRetrieveFlag(t *testing.T) {
 }
 
 func TestDsvGetToken(t *testing.T) {
+	is := is.New(t)
+
+	cfg := &config{
+		IsCI: true,
+	}
 	cases := []struct {
 		name        string
 		apiEndpoint string
@@ -200,18 +207,21 @@ func TestDsvGetToken(t *testing.T) {
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			result, err := dsvGetToken(tc.client, tc.apiEndpoint, tc.cid, tc.csecret)
+			result, err := dsvGetToken(tc.client, tc.apiEndpoint, tc.cid, tc.csecret, cfg)
+
 			if (tc.wantErr != nil && tc.wantErr.Error() != err.Error()) || (tc.wantErr == nil && err != nil) {
-				t.Errorf("want error:\n\t%v\ngot:\n\t%v", tc.wantErr, err)
+				// T.Errorf("want error:\n\t%v\ngot:\n\t%v", tc.wantErr, err).
+				is.Equal(tc.wantErr, err) // Error should match.
 			}
-			if tc.want != result {
-				t.Errorf("want:\n\t%v\ngot:\n\t%v", tc.want, result)
-			}
+			is.Equal(tc.want, result) // Result should match.
 		})
 	}
 }
 
 func TestDsvGetSecret(t *testing.T) {
+	cfg := &config{
+		IsCI: true,
+	}
 	cases := []struct {
 		name        string
 		client      httpClient
@@ -219,7 +229,7 @@ func TestDsvGetSecret(t *testing.T) {
 		accessToken string
 		secretPath  string
 		want        map[string]interface{}
-		wantErr     error
+		wantErr     bool
 	}{
 		{
 			name: "happy path",
@@ -239,10 +249,10 @@ func TestDsvGetSecret(t *testing.T) {
 			want: map[string]interface{}{
 				"key": "val",
 			},
-			wantErr: nil,
+			wantErr: false,
 		},
 		{
-			name: "bad request",
+			name: "GET secret should fail with 400",
 			client: &MockHTTPClient{
 				response: &http.Response{
 					Status:     "400 Bad Request",
@@ -255,10 +265,10 @@ func TestDsvGetSecret(t *testing.T) {
 			accessToken: "token",
 			secretPath:  "folder1/secret1",
 			want:        nil,
-			wantErr:     fmt.Errorf("API call failed: GET test.example.com/secrets/folder1/secret1: 400 Bad Request"),
+			wantErr:     true,
 		},
 		{
-			name: "http error",
+			name: "GET should fail",
 			client: &MockHTTPClient{
 				response: nil,
 				err:      fmt.Errorf("error"),
@@ -267,10 +277,10 @@ func TestDsvGetSecret(t *testing.T) {
 			accessToken: "token",
 			secretPath:  "folder1/secret1",
 			want:        nil,
-			wantErr:     fmt.Errorf("API call failed: error"),
+			wantErr:     true,
 		},
 		{
-			name: "nil body",
+			name: "nil body should fail on unmarshaling",
 			client: &MockHTTPClient{
 				response: &http.Response{
 					Status:     "200 OK",
@@ -283,17 +293,18 @@ func TestDsvGetSecret(t *testing.T) {
 			accessToken: "token",
 			secretPath:  "folder1/secret1",
 			want:        nil,
-			wantErr:     fmt.Errorf("API call failed: could not unmarshal response body: unexpected end of JSON input"),
+			wantErr:     true,
 		},
 	}
+
 	for _, tc := range cases {
+		is := is.New(t)
 		t.Run(tc.name, func(t *testing.T) {
-			result, err := dsvGetSecret(tc.client, tc.apiEndpoint, tc.accessToken, tc.secretPath)
-			if (tc.wantErr != nil && tc.wantErr.Error() != err.Error()) || (tc.wantErr == nil && err != nil) {
-				t.Errorf("want error:\n\t%v\ngot:\n\t%v", tc.wantErr, err)
-			}
-			if !reflect.DeepEqual(tc.want, result) {
-				t.Errorf("want:\n\t%v\ngot:\n\t%v", tc.want, result)
+			result, err := dsvGetSecret(tc.client, tc.apiEndpoint, tc.accessToken, tc.secretPath, cfg)
+			if tc.wantErr {
+				is.True(err != nil) // Should fail due to file missing.
+			} else {
+				is.Equal(tc.want, result) // Returned result should match expected value.
 			}
 		})
 	}
@@ -301,75 +312,46 @@ func TestDsvGetSecret(t *testing.T) {
 
 func TestOpenEnvFile(t *testing.T) {
 	cases := []struct {
-		name     string
-		envs     map[string]string
-		gitlabCI bool
-		githubCI bool
-		wantErr  error
+		name       string
+		envs       map[string]string
+		isCI       bool
+		shouldFail bool
 	}{
 		{
-			name: "gitlabCI: no variable set",
+			name: "githubCI should fail when required variables",
 			envs: map[string]string{
 				"CI_JOB_NAME":     "",
 				"CI_PROJECT_PATH": "",
 				"GITHUB_ENV":      "",
 			},
-			gitlabCI: true,
-			wantErr:  fmt.Errorf("CI_JOB_NAME environment is not defined"),
+			isCI:       true,
+			shouldFail: true,
 		},
 		{
-			name: "githubCI: no variable set",
+			name: "githubCI should fail when unable to open envfile",
 			envs: map[string]string{
 				"CI_JOB_NAME":     "",
 				"CI_PROJECT_PATH": "",
-				"GITHUB_ENV":      "",
+				"GITHUB_ENV":      "./cache/.nonexistentfile",
 			},
-			githubCI: true,
-			wantErr:  fmt.Errorf("GITHUB_ENV environment is not defined"),
-		},
-		{
-			name: "githubCI: cannot open file",
-			envs: map[string]string{
-				"CI_JOB_NAME":     "",
-				"CI_PROJECT_PATH": "",
-				"GITHUB_ENV":      "./myfile",
-			},
-			githubCI: true,
-			wantErr:  fmt.Errorf("cannot open file ./myfile: open ./myfile: no such file or directory"),
-		},
-		{
-			name: "gitlabCI: no CI_PROJECT_PATH",
-			envs: map[string]string{
-				"CI_JOB_NAME":     "some_job",
-				"CI_PROJECT_PATH": "",
-				"GITHUB_ENV":      "",
-			},
-			gitlabCI: true,
-			wantErr:  fmt.Errorf("CI_PROJECT_PATH environment is not defined"),
-		},
-		{
-			name: "gitlabCI: cannot open file",
-			envs: map[string]string{
-				"CI_JOB_NAME":     "some_job",
-				"CI_PROJECT_PATH": "some_project",
-				"GITHUB_ENV":      "",
-			},
-			gitlabCI: true,
-			wantErr: fmt.Errorf(
-				"cannot open file /builds/some_project/some_job: open /builds/some_project/some_job: no such file or directory",
-			),
+			isCI:       true,
+			shouldFail: true,
 		},
 	}
+	is := is.New(t)
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			githubCI = tc.githubCI
-			gitlabCI = tc.gitlabCI
+			cfg := &config{
+				IsCI: tc.isCI,
+			}
 			for key, val := range tc.envs {
 				os.Setenv(key, val)
 			}
-			_, err := openEnvFile(true)
-			if (tc.wantErr != nil && tc.wantErr.Error() != err.Error()) || (tc.wantErr == nil && err != nil) {
-				t.Errorf("want error:\n\t%v\ngot:\n\t%v", tc.wantErr, err)
+			_, err := actionsopenEnvFile(cfg)
+			if tc.shouldFail {
+				is.True(err != nil) // Should fail.
+			} else {
+				is.NoErr(err) // Should open envfile without issue.
 			}
 		})
 	}
