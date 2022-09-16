@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Read secrets from DSV
         id: dsv
-        uses: mariiatuzovska/dsv-ci-plugin@v6.2
+        uses: mariiatuzovska/dsv-ci-plugin@v6.3
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
