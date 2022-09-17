@@ -84,3 +84,11 @@ dockers:
       - --label=org.opencontainers.image.revision={{ .FullCommit }}
       - --label=org.opencontainers.image.version={{.Version}}
       - --label=org.opencontainers.image.version="{{ .Tag }}"
+announce:
+  slack:
+    enabled: true
+    # The name of the channel that the user selected as a destination for webhook messages.
+    channel: '{{ .Env.SLACK_CHANNEL }}'
+    message_template: ':github: {{ .ProjectName }} {{ .Tag }} is out. {{ .ReleaseURL }}'
+    # Emoji to use as the icon for this message. Overrides icon_url.
+    icon_emoji: ':rocket:'
