@@ -82,8 +82,6 @@ func Release() error {
 
 	releaserArgs := []string{
 		"release",
-		"--auto-snapshot",
-		"--snapshot",
 		"--rm-dist",
 	}
 	pterm.Debug.Printfln("goreleaser: %+v", releaserArgs)
