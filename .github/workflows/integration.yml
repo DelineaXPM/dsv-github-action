@@ -1,12 +1,12 @@
 ---
 name: integration
 on:
-  pull_request:
-  push:
-    branches:
-      - main
-    tags:
-      - v*
+  # pull_request:
+  # push:
+  #   branches:
+  #     - main
+  #   tags:
+  #     - v*
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: dsv
-        uses: delineaxpm/dsv-github-action@latest
+        uses: delineaxpm/dsv-github-action@v1 # renovate: tag=v1
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
