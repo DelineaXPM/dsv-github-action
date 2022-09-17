@@ -48,7 +48,8 @@ changelog:
       - '^docs:'
       - '^test:'
 dockers:
-  - goos: linux
+  - id: docker-publish
+    goos: linux
     # goarch: amd64
     # goarm: ''
     # goamd64: v2
@@ -58,6 +59,22 @@ dockers:
       - '{{ .ProjectName }}:{{ .Tag }}'
       - '{{ .ProjectName }}:latest' # This one is for dev usage so latest version, no tagged semver required in docker compose or local testing
     skip_push: false
+    dockerfile: ./docker/Dockerfile.distroless
+    use: buildx
+    build_flag_templates:
+      - --platform=linux/amd64
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.title={{ .ProjectName }}
+      - --label=org.opencontainers.image.revision={{ .FullCommit }}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.version="{{ .Tag }}"
+  # local builds
+  - id: local-docker-images
+    goos: linux
+    image_templates:
+      - '{{ .ProjectName }}:{{ .Tag }}'
+      - '{{ .ProjectName }}:latest' # This one is for dev usage so latest version, no tagged semver required in docker compose or local testing
+    skip_push: true
     dockerfile: ./docker/Dockerfile.distroless
     use: buildx
     build_flag_templates:
