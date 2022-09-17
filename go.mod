@@ -7,7 +7,7 @@ require (
 	github.com/magefile/mage v1.13.0
 	github.com/pterm/pterm v0.12.46
 	github.com/sheldonhull/magetools v0.0.12
-	golang.org/x/tools v0.0.0-20191119224855-298f0cb1881e
+	golang.org/x/tools v0.1.12
 )
 
 require (
