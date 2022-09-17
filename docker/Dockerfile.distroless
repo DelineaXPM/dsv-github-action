@@ -21,7 +21,9 @@
 # libssl
 # openssl
 
-
+# To debug: change tag to debug instead of nonroot, then
+# run `docker run --rm -it --entrypoint=sh dev.local/dsv-github-action` and take a look in the image.
+# move back to nonroot when done.
 
 FROM gcr.io/distroless/static:nonroot
 COPY dsv-github-action /app/dsv-github-action

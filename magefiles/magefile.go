@@ -7,6 +7,7 @@ import (
 	"github.com/DelineaXPM/dsv-github-action/magefiles/constants"
 
 	"github.com/magefile/mage/mg"
+	"github.com/magefile/mage/sh"
 	"github.com/pterm/pterm"
 	"github.com/sheldonhull/magetools/ci"
 	"github.com/sheldonhull/magetools/tooling"
@@ -20,6 +21,9 @@ import (
 	//mage:import
 	_ "github.com/sheldonhull/magetools/secrets"
 )
+
+// Test contains mage tasks for testing.
+type Test mg.Namespace
 
 // createDirectories creates the local working directories for build artifacts and tooling.
 func createDirectories() error {
@@ -78,4 +82,18 @@ func Clean() {
 		pterm.Success.Printf("🧹 [%s] dir removed\n", dir)
 	}
 	mg.Deps(createDirectories)
+}
+
+// TestIntegration runs local act cli to test the integration.
+func (Test) Integration() error {
+	return sh.RunV(
+		"act",
+		"--job", "integration",
+		"--secret-file", constants.SecretFile,
+	)
+}
+
+// Unit runs go unit tests.
+func (Test) Unit() {
+	mg.Deps(gotools.Go{}.TestSum("./..."))
 }

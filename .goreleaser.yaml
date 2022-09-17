@@ -49,15 +49,16 @@ changelog:
       - '^test:'
 dockers:
   - goos: linux
-    goarch: amd64
-    goarm: ''
-    goamd64: v2
+    # goarch: amd64
+    # goarm: ''
+    # goamd64: v2
     image_templates:
-      - '{{ .Env.DOCKER_ORG }}/{{ .ProjectName }}:{{ .Tag }}'
-      - '{{ .ProjectName }}:{{ .Tag }}'
-      - '{{ .ProjectName }}:latest' # This one is for dev usage so latest version, no tagged semver required in docker compose or local testing
+      - '{{ if index .Env "DOCKER_ORG" }}{{ .Env.DOCKER_ORG }}/{{ .ProjectName }}:{{ .Tag }}{{ end }}'
+      - '{{ if index .Env "DOCKER_ORG" }}{{ .Env.DOCKER_ORG }}/{{ .ProjectName }}:latest{{ end }}'
+      - 'dev.local/{{ .ProjectName }}:{{ .Tag }}'
+      - 'dev.local/{{ .ProjectName }}:latest' # This one is for dev usage so latest version, no tagged semver required in docker compose or local testing
     skip_push: 'true'
-    dockerfile: ./Dockerfile.distroless
+    dockerfile: ./docker/Dockerfile.distroless
     use: buildx
     build_flag_templates:
       - --platform=linux/amd64

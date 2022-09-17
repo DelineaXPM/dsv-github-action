@@ -1,0 +1,42 @@
+{
+  "projectName": "dsv-github-action",
+  "projectOwner": "DelineaXPM",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "mariiatuzovska",
+      "name": "Mariia",
+      "avatar_url": "https://avatars.githubusercontent.com/u/41679258?v=4",
+      "profile": "https://github.com/mariiatuzovska",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "sheldonhull",
+      "name": "sheldonhull",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3526320?v=4",
+      "profile": "https://www.sheldonhull.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "andrii-zakurenyi",
+      "name": "andrii-zakurenyi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/85106843?v=4",
+      "profile": "https://github.com/andrii-zakurenyi",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}

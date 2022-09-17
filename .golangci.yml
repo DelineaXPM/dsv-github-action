@@ -229,7 +229,6 @@ linters:
     - execinquery # Causes error in mtservice by https://github.com/golangci/golangci-lint/issues/2835, v1.46.0. Should remove from here after the bug is fixed.
     - nonamedreturns # Added by https://github.com/golangci/golangci-lint/pull/2701, v1.46.0. Named returns are useful for defer. May remove from here and use nolint in future task.
     - forbidigo # Disabled 2022-07-22 until migrating to a structured logger package. FMT is allowed for now
-    - nosnakecase # deprecated
     - structcheck # abandoned
     - varcheck # abandoned
     - deadcode # abandoned

@@ -12,3 +12,9 @@ const (
 	// CacheDirectory is where the cache for the project is placed, ie artifacts that don't need to be rebuilt often.
 	CacheDirectory = ".cache"
 )
+
+const (
+
+	// SecretFile is a local env file for testing integration with github action and not added to source control.
+	SecretFile = ".cache/.secrets"
+)

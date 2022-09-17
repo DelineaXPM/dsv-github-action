@@ -14,21 +14,34 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  test:
+  integration:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v3
-      - name: Read secrets from DSV
-        id: dsv
-        uses: mariiatuzovska/dsv-ci-plugin@v6.2
+      - id: dsv
+        uses: delineaxpm/dsv-github-action@latest
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
           clientSecret: ${{ secrets.DSV_CLIENT_SECRET }}
           setEnv: true
           retrieve: |
-            ${{ secrets.DSV_SECRET_PATH_ONE }} ${{ secrets.DSV_SECRET_KEY_ONE }} AS myVal1
-            ${{ secrets.DSV_SECRET_PATH_TWO }} ${{ secrets.DSV_SECRET_KEY_TWO }} AS MYVAL2
-      - name: Print secret referencing ID of the step.
-        run: echo ${{ steps.dsv.outputs.myVal1 }}
+            ${{ secrets.DSV_SECRET_PATH }} ${{ secrets.DSV_SECRET_KEY_1 }} AS RETURN_VALUE_1
+            ${{ secrets.DSV_SECRET_PATH }} ${{ secrets.DSV_SECRET_KEY_2 }} AS RETURN_VALUE_2
+      - name: validate-first-value
+        if: always()
+        run: |
+          if [ "${{ steps.dsv.outputs.RETURN_VALUE_1 }}" == "${{ secrets.DSV_EXPECTED_VALUE_1 }}" ]; then
+              echo "✅ test value is matched"
+          else
+              echo "❌ mismatch, failed to return test value"
+          fi
+      - name: validate-second-value
+        if: always()
+        run: |
+          if [ "${{ steps.dsv.outputs.RETURN_VALUE_1 }}" == "${{ secrets.DSV_EXPECTED_VALUE_2 }}" ]; then
+              echo "✅ test value is matched"
+          else
+              echo "❌ mismatch, failed to return test value"
+          fi

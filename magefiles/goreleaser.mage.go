@@ -48,7 +48,7 @@ func Build() error {
 	return sh.RunV(binary, releaserArgs...) // "--skip-announce",.
 }
 
-// 🔨 BuildAll builds all the binaries defined in the project, for all platforms.
+// 🔨 BuildAll builds all the binaries defined in the project, for all platforms. This includes Docker image generation but skips publish.
 // If there is no additional platforms configured in the task, then basically this will just be the same as `mage build`.
 func BuildAll() error {
 	magetoolsutils.CheckPtermDebug()
@@ -57,11 +57,15 @@ func BuildAll() error {
 		return err
 	}
 
-	return sh.RunV(binary,
-		"build",
-		"--rm-dist",
+	releaserArgs := []string{
+		"release",
 		"--snapshot",
-	)
+		"--rm-dist",
+		"--skip-publish",
+	}
+	pterm.Debug.Printfln("goreleaser: %+v", releaserArgs)
+
+	return sh.RunV(binary, releaserArgs...)
 }
 
 // 🔨 Release generates a release for the current platform.
