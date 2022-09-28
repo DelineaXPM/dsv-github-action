@@ -6,8 +6,8 @@
 
 - Docker
 - Visual Studio Code
-    - Run `code --install-extension ms-vscode-remote.remote-containers`
-    - For supporting Codespaces: `code --install-extension GitHub.codespaces`
+  - Run `code --install-extension ms-vscode-remote.remote-containers`
+  - For supporting Codespaces: `code --install-extension GitHub.codespaces`
 
 ## Spin It Up
 

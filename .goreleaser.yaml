@@ -94,4 +94,4 @@ announce:
 sboms:
   - artifacts: binary
     documents:
-      - "${artifact}.spdx.sbom"
+      - '${artifact}.spdx.sbom'

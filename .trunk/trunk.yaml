@@ -1,4 +1,8 @@
 ---
+actions:
+  enabled:
+    - trunk-check-pre-push
+    - trunk-fmt-pre-commit
 version: 0.1
 runtimes:
   enabled:

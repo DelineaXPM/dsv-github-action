@@ -10,10 +10,7 @@
       "request": "launch",
       "mode": "test",
       "program": "${workspaceFolder}",
-      "args": [
-        "-test.run",
-        "TestOpenEnvFile"
-      ]
+      "args": ["-test.run", "TestOpenEnvFile"]
     },
     {
       "name": "Launch file",
@@ -28,6 +25,6 @@
       "request": "launch",
       "mode": "auto",
       "program": "${fileDirname}"
-    },
+    }
   ]
 }

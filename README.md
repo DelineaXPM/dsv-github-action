@@ -15,22 +15,22 @@ Now, instead of storing all your secrets directly in your GitHub repo configurat
 - [Developer](DEVELOPER.md): instructions on running tests, local tooling, and other resources.
 - [DSV Documentation](https://docs.delinea.com/dsv/current?ref=githubrepo)
 - [Download DSV CLI](https://dsv.secretsvaultcloud.com/downloads)
-    - Quick install example (adjust to platform/version): `curl -fSsl https://dsv.secretsvaultcloud.com/downloads/cli/1.37.5/dsv-darwin-x64 -o dsv && chmod +x ./dsv && sudo mv ./dsv /usr/local/bin`
+  Quick install example (adjust to platform/version): `curl -fSsl https://dsv.secretsvaultcloud.com/downloads/cli/1.37.5/dsv-darwin-x64 -o dsv && chmod +x ./dsv && sudo mv ./dsv /usr/local/bin`
 - Remaining readme for the usage directions.
 - Install [github-cli](https://cli.github.com/) for easier setup.
-    - quick: `brew install gh` or see [installation instructions](https://github.com/cli/cli#installation)
+  - quick: `brew install gh` or see [installation instructions](https://github.com/cli/cli#installation)
 
 ## How This Works
 
 ## Inputs
 
-| Name           | Description                                                              |
-| -------------- | ------------------------------------------------------------------------ |
-| `domain`       | Tenant domain name (e.g. example.secretsvaultcloud.com).                 |
-| `clientId`     | Client ID for authentication.                                            |
-| `clientSecret` | Client Secret for authentication.                                        |
-| `setEnv`       | Set environment variables. Applicable only for GitHub Actions.           |
-| `retrieve`     | Data to retrieve from DSV in json format. |
+| Name           | Description                                                    |
+| -------------- | -------------------------------------------------------------- |
+| `domain`       | Tenant domain name (e.g. example.secretsvaultcloud.com).       |
+| `clientId`     | Client ID for authentication.                                  |
+| `clientSecret` | Client Secret for authentication.                              |
+| `setEnv`       | Set environment variables. Applicable only for GitHub Actions. |
+| `retrieve`     | Data to retrieve from DSV in json format.                      |
 
 ## Prerequisites
 
@@ -149,11 +149,11 @@ jobs:
 The json expects an array, so just add a new line.
 
 ```yaml
-          retrieve: |
-            [
-             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_1" },
-             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value2", "outputVariable": "MY_ENV_VAR_2" }
-            ]
+retrieve: |
+  [
+   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_1" },
+   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value2", "outputVariable": "MY_ENV_VAR_2" }
+  ]
 ```
 
 ### Retrieve 2 Values from Different Secrets
@@ -161,11 +161,11 @@ The json expects an array, so just add a new line.
 > Note: Make sure your generated client credentials are associated a policy that has rights to read the different secrets.
 
 ```yaml
-          retrieve: |
-            [
-             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_1" },
-             {"secretPath": "ci:tests:dsv-github-action:secret-02", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_2" }
-            ]
+retrieve: |
+  [
+   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_1" },
+   {"secretPath": "ci:tests:dsv-github-action:secret-02", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_2" }
+  ]
 ```
 
 ## Contributors ✨

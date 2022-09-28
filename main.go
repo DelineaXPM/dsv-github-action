@@ -13,14 +13,16 @@ const (
 	// ExitSuccess is exit code sent for running without any error.
 	exitSuccess = 0
 )
+
 //nolint:gochecknoglobals // ok for providing as version output
 var (
-    version = "dev"
-    commit  = "none"
-    date    = "unknown"
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
 )
+
 func main() {
-	pterm.Info.Printf("version: %s\n"+"commit: %s\n" + "built: %s\n", version, commit, date)
+	pterm.Info.Printf("version: %s\n"+"commit: %s\n"+"built: %s\n", version, commit, date)
 
 	if err := dga.Run(); err != nil {
 		pterm.Error.Printfln("run(): %v", err)
