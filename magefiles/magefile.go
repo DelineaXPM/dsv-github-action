@@ -53,6 +53,7 @@ func Init() error {
 
 	mg.Deps(
 		(gotools.Go{}.Tidy),
+		(InstallSyft),
 	)
 	if err := tooling.SilentInstallTools(CIToolList); err != nil {
 		return err
@@ -71,7 +72,6 @@ func Init() error {
 		(gotools.Go{}.Init),
 		(gittools.Gittools{}.Init),
 		(precommit.Precommit{}.Init),
-		(InstallSyft),
 		(InstallTrunk),
 	)
 	return nil
