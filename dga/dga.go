@@ -9,8 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-
-	// "regexp".
 	"strings"
 	"time"
 
@@ -34,7 +32,7 @@ type Config struct {
 	DomainEnv       string `env:"DSV_DOMAIN,required"`                 // Tenant domain name (e.g. example.secretsvaultcloud.com).
 	ClientIDEnv     string `env:"DSV_CLIENT_ID,required"`              // Client ID for authentication.
 	ClientSecretEnv string `json:"-" env:"DSV_CLIENT_SECRET,required"` // Client Secret for authentication.
-	RetrieveEnv     string `env:"DSV_RETRIEVE,required"`               // Rows with data to retrieve from DSV in format `<path> <data key> as <output key>`.
+	RetrieveEnv     string `env:"DSV_RETRIEVE,required"`               // JSON formatted string with data to retrieve from DSV.
 }
 
 // RetrieveValues is the struct to put keyvalues into
@@ -149,7 +147,6 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 	}
 
 	retrievedValues, err = ParseRetrieve(cfg.RetrieveEnv)
-
 	if err != nil {
 		pterm.Error.Printfln("run failure: %v", err)
 		return err
@@ -190,28 +187,29 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 		}
 		pterm.Success.Printfln("retrieved successfully: %q", item)
 
-		for dataKey := range secretData {
-			val, ok := secretData[item.SecretKey].(string)
-			if !ok {
-				pterm.Error.Printfln("%q: Key %q not found in data", item, dataKey)
-				return fmt.Errorf("specified field was not found in data")
-			}
+		val, ok := secretData[item.SecretKey].(string)
+		if !ok {
+			pterm.Error.Printfln("%q: Key %q not found in data", item, item.SecretKey)
+			return fmt.Errorf("specified field was not found in data")
+		}
 
-			pterm.Debug.Printfln("%q: Found %q key in data", item, dataKey)
-			outputKey := item.OutputVariable
-			if cfg.IsCI {
-				actionSetOutput(outputKey, val) // TODO: this needs to be correctly set to use the right output variable.
-				pterm.Debug.Printfln("%q: Set output %q to value in %q", item.SecretPath, outputKey, dataKey)
-				pterm.Success.Printfln("actionSetOutput success: %q", outputKey)
+		pterm.Debug.Printfln("%q: Found %q key in data", item, item.SecretKey)
+
+		if !cfg.IsCI {
+			continue
+		}
+
+		outputKey := item.OutputVariable
+		actionSetOutput(outputKey, val) // TODO: this needs to be correctly set to use the right output variable.
+		pterm.Debug.Printfln("%q: Set output %q to value in %q", item.SecretPath, outputKey, item.SecretKey)
+		pterm.Success.Printfln("actionSetOutput success: %q", outputKey)
+
+		if cfg.SetEnv {
+			if err := ActionsExportVariable(envFile, outputKey, val); err != nil { // TODO: this needs to be correctly set to use the right output variable.
+				pterm.Error.Printfln("%q: unable to export env variable: %v", outputKey, err)
+				return fmt.Errorf("cannot set environment variable")
 			}
-			if cfg.IsCI && cfg.SetEnv {
-				if err := ActionsExportVariable(envFile, outputKey, val); err != nil { // TODO: this needs to be correctly set to use the right output variable.
-					pterm.Error.Printfln("%q: unable to export env variable: %v", outputKey, err)
-					return fmt.Errorf("cannot set environment variable")
-				}
-				pterm.Success.Printfln("%q: Set env var %q to value in %q", item, strings.ToUpper(outputKey), item.SecretKey)
-				break
-			}
+			pterm.Success.Printfln("%q: Set env var %q to value in %q", item, strings.ToUpper(outputKey), item.SecretKey)
 		}
 	}
 	return nil
@@ -259,7 +257,7 @@ func DSVGetToken(c HTTPClient, apiEndpoint string, cfg *Config) (string, error) 
 func DSVGetSecret(client HTTPClient, apiEndpoint, accessToken string, item SecretToRetrieve, cfg *Config) (map[string]interface{}, error) {
 	pterm.Info.Println("dsvGetSecret()")
 	// Endpoint := apiEndpoint + "/secrets/" + secretPath.
-	endpoint, err := url.JoinPath(apiEndpoint, []string{"secrets", item.SecretPath}...)
+	endpoint, err := url.JoinPath(apiEndpoint, "secrets", item.SecretPath)
 	if err != nil {
 		pterm.Debug.Println("dsvGetSecret() problem with building url")
 		return nil, fmt.Errorf("unable to build url: %w", err)
@@ -289,13 +287,8 @@ func actionSetOutput(key, val string) {
 // ActionsOpenEnvFile is used for writing secrets back in GitHub.
 func ActionsOpenEnvFile(cfg *Config) (*os.File, error) {
 	pterm.Info.Println("actionsopenEnvFile()")
-	var (
-		envFileName string
-		envFile     *os.File
-		err         error
-	)
 
-	envFileName, err = cfg.getGithubEnv()
+	envFileName, err := cfg.getGithubEnv()
 	if err != nil {
 		return nil, fmt.Errorf("GITHUB_ENV environment is not defined")
 	}
@@ -313,7 +306,7 @@ func ActionsOpenEnvFile(cfg *Config) (*os.File, error) {
 		pterm.Info.Printfln("envFileName permission: %#o", fi.Mode().Perm())
 	}
 
-	envFile, err = os.OpenFile(envFileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, PermissionReadWriteOwner) //nolint:nosnakecase // these are standard package values and ok to leave snakecase.
+	envFile, err := os.OpenFile(envFileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, PermissionReadWriteOwner) //nolint:nosnakecase // these are standard package values and ok to leave snakecase.
 	if errors.Is(err, os.ErrNotExist) {
 		// See if we can provide some useful info on the existing permissions.
 		return nil, fmt.Errorf("envfile doesn't exist or has denied permission %s: %w", envFileName, err)
