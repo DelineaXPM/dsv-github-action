@@ -26,7 +26,7 @@ inputs:
     required: true
   retrieve:
     description: |
-      Formatted as: <path> <key> as <outputAlias>
+      Formatted as json. See README for details.
       This is the secrets to retrieve and the resulting secret variable that others steps should be able to use.
     required: true
 runs:
