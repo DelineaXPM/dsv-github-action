@@ -27,18 +27,30 @@ jobs:
           version: latest
           args: init
       - name: docker-login
-        uses: docker/login-action@v2
+        uses: docker/login-action@v2 # renovate: tag=v2
         with:
           username: ${{ secrets.DSV_DOCKER_USERNAME }}
           password: ${{ secrets.DSV_DOCKER_PASSWORD }}
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@ff11ca24a9b39f2d36796d1fbd7a4e39c182630a # renovate: tag=v3.1.0
+      - name: mage-release
+        uses: magefile/mage-action@5f7a9a23cfef763949ca41834b868167adbd1b59 # renovate: tag=v2
         with:
           version: latest
-          args: release --rm-dist
+          args: init
         env:
           # GitHub sets this automatically
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_CHANNEL: ${{ secrets.DSV_SLACK_CHANNEL }}
           SLACK_WEBHOOK: ${{ secrets.DSV_SLACK_WEBHOOK }}
           DOCKER_ORG: ${{ secrets.DSV_DOCKER_REGISTRY }}
+
+      # - name: Run GoReleaser
+      #   uses: goreleaser/goreleaser-action@ff11ca24a9b39f2d36796d1fbd7a4e39c182630a # renovate: tag=v3.1.0
+      #   with:
+      #     version: latest
+      #     args: release --rm-dist
+      #   env:
+      #     # GitHub sets this automatically
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SLACK_CHANNEL: ${{ secrets.DSV_SLACK_CHANNEL }}
+      #     SLACK_WEBHOOK: ${{ secrets.DSV_SLACK_WEBHOOK }}
+      #     DOCKER_ORG: ${{ secrets.DSV_DOCKER_REGISTRY }}
