@@ -44,10 +44,23 @@ snapshot:
 changelog:
   skip: false
   sort: asc
+  groups:
+      - title: Features
+        regexp: "^.*feat[(\\w)]*:+.*$"
+        order: 0
+      - title: 'Fixes'
+        regexp: "^.*fix[(\\w)]*:+.*$"
+        order: 1
+      - title: 'CI & Chore'
+        regexp: "^.*(fix|chore|build)[(\\w)]*:+.*$"
+        order: 2
+      - title: Others
+        order: 999
   filters:
     exclude:
       - '^docs:'
       - '^test:'
+      - '^style:'
 dockers:
   - id: docker-publish
     goos: linux
