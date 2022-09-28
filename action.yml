@@ -1,4 +1,5 @@
 ---
+name: dsv-github-action
 description: Delinea DevOps Secrets Vault (DSV) GitHub Actions Plugin allows you to access DSV Secrets for use in GitHub Actions
 branding:
   icon: unlock
