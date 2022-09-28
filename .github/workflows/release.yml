@@ -35,7 +35,7 @@ jobs:
         uses: magefile/mage-action@5f7a9a23cfef763949ca41834b868167adbd1b59 # renovate: tag=v2
         with:
           version: latest
-          args: init
+          args: release
         env:
           # GitHub sets this automatically
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
