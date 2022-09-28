@@ -1,10 +1,13 @@
 ---
 comment: my-markdown-linting-rules
+indentation: false
+
 default: true
 # MD003:
 #   style:
-MD007:
-  indent: 4
+MD002: true
+MD007: true
+
 no-hard-tabs: true
 whitespace: true
 no-bare-urls: true

@@ -72,10 +72,21 @@ func Init() error {
 		(gittools.Gittools{}.Init),
 		(precommit.Precommit{}.Init),
 		(InstallSyft),
+		(InstallTrunk),
 	)
 	return nil
 }
 
+// InstallTrunk installs trunk.io tooling.
+func InstallTrunk() error {
+	_, err := script.Exec("curl https://get.trunk.io -fsSL").Exec("bash").Stdout()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// InstallSyft installs SBOM tooling for goreleaser.
 func InstallSyft() error {
 	_, err := script.Exec("curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh").Exec("sh -s -- -b /usr/local/bin").Stdout()
 	if err != nil {

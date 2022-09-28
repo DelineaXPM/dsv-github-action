@@ -62,3 +62,44 @@ gh secret create DSV_SECRET_KEY_2
 gh secret create DSV_EXPECTED_VALUE_1
 gh secret create DSV_EXPECTED_VALUE_2
 ```
+
+For general config you'll also need:
+
+```shell
+gh secret set DSV_SERVER
+gh secret set DSV_CLIENT_SECRET                                                                                          gh secret set DSV_CLIENT_ID
+```
+
+## Local Integration Testing
+
+Ensure you've setup with `mage init` to have all the tooling.
+
+Run `mage buildall test:integration`.
+
+Setup a test env file to load into the dockerized test run.
+
+```shell
+# To read from local credfile (not optimal)
+# DSV_CLIENT_ID=$(cat "${clientcredfile}" | jq '.clientId' --raw-output)
+# DSV_CLIENT_SECRET=$(cat "${clientcredfile}" | jq '.clientSecret' --raw-output)
+# INSTEAD: read using dsv cli! 💯
+rm .cache/.secrets
+rm .cache/.envfile
+touch .cache/.envfile
+cat <<EOT >> .cache/.secrets
+DSV_SECRET_PATH=secrets:ci:tests:dsv-github-action:secret-01
+DSV_SECRET_KEY_1=<testvaluehere>
+DSV_SECRET_KEY_2=<testvaluehere>
+DSV_EXPECTED_VALUE_1=<testvaluehere>
+DSV_EXPECTED_VALUE_2=<testvaluehere>
+DSV_DOMAIN=<tenanthere>.secretsvaultcloud.com
+DSV_CLIENT_ID=$(dsv secret read "${secretpathclient}" --filter '.data.clientId')
+DSV_CLIENT_SECRET=$(dsv secret read "${secretpathclient}" --filter '.data.clientSecret')
+GITHUB_TOKEN=${GITHUB_TOKEN}
+GITHUB_ENV=/app/.cache/.envfile
+GITHUB_ACTIONS=true
+DSV_SET_ENV=true
+DSV_RETRIEVE=[{"secretPath": "ci:tests:dsv-github-action:secret-01", "secret_key": "", "output_variable": "RETURN_VALUE_1"}]
+RUNNER_DEBUG=true
+EOT
+```
