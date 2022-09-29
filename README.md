@@ -103,8 +103,6 @@ jobs:
       - uses: actions/checkout@v3
       - id: dsv
         uses: delineaxpm/dsv-github-action@v1 # renovate: tag=v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
@@ -127,8 +125,6 @@ jobs:
       - uses: actions/checkout@v3
       - id: dsv
         uses: delineaxpm/dsv-github-action@v1 # renovate: tag=v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
