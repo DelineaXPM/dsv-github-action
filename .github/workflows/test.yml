@@ -3,10 +3,10 @@ name: test
 on:
   pull_request:
   # push:
-    # branches:
-    #   - main
-    # tags:
-    #   - v*
+  # branches:
+  #   - main
+  # tags:
+  #   - v*
   workflow_dispatch:
   workflow_call:
 permissions:

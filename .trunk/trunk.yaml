@@ -1,26 +1,30 @@
 ---
 actions:
   enabled:
+    - trunk-cache-prune
+    - trunk-upgrade-available
     - trunk-check-pre-push
     - trunk-fmt-pre-commit
 version: 0.1
 runtimes:
   enabled:
+    - node@16.14.2
+    - python@3.10.3
     - go@1.19 # make sure this matches what's in go.mod for this to work correctly.
 cli:
-  version: 0.17.0-beta
+  version: 0.18.1-beta
 plugins:
   sources:
     - id: trunk
-      ref: v0.0.3
+      ref: v0.0.4
       uri: https://github.com/trunk-io/plugins
 lint:
   enabled:
-    - actionlint@1.6.17
+    - actionlint@1.6.19
     - git-diff-check@SYSTEM
-    - gitleaks@8.12.0
+    - gitleaks@8.13.0
     - gofmt@1.16.7
-    - golangci-lint@1.46.2
+    - golangci-lint@1.49.0
     - hadolint@2.10.0
     - markdownlint@0.32.2
     - prettier@2.7.1
@@ -32,3 +36,4 @@ lint:
     - linters: [ALL]
       paths:
         - .devcontainer/library-scripts
+        - vendor/*
