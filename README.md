@@ -65,7 +65,7 @@ gh secret set DSV_CLIENT_ID --body "$( echo "${clientcred}" | jq '.clientId' )"
 gh secret set DSV_CLIENT_SECRET --body "$( echo "${clientcred}" | jq '.clientSecret')"
 ```
 
-For further setup, here's how you could create extend that script block above with also creating a secret and the policy to read just this secret.
+For further setup, here's how you could extend that script block above with also creating a secret and the policy to read just this secret.
 
 ```shell
 # Create a secret
@@ -85,7 +85,7 @@ dsv policy create \
   --resources "${secretpath}:<.*>"
 ```
 
-## GitHub usage example
+## Usage
 
 See [integration.yaml](.github/workflows/integration.yaml) for an example of how to use this to retrieve secrets and use outputs on other tasks.
 
