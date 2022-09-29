@@ -1,9 +1,7 @@
 # dsv-github-action
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
-
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Use Delinea DevOps Secret Vault for retrieval of your secrets.
@@ -174,11 +172,15 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://github.com/mariiatuzovska"><img src="https://avatars.githubusercontent.com/u/41679258?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mariia</b></sub></a><br /><a href="https://github.com/DelineaXPM/dsv-github-action/commits?author=mariiatuzovska" title="Code">💻</a></td>
-      <td align="center"><a href="https://www.sheldonhull.com/"><img src="https://avatars.githubusercontent.com/u/3526320?v=4?s=100" width="100px;" alt=""/><br /><sub><b>sheldonhull</b></sub></a><br /><a href="https://github.com/DelineaXPM/dsv-github-action/commits?author=sheldonhull" title="Code">💻</a></td>
-      <td align="center"><a href="https://github.com/andrii-zakurenyi"><img src="https://avatars.githubusercontent.com/u/85106843?v=4?s=100" width="100px;" alt=""/><br /><sub><b>andrii-zakurenyi</b></sub></a><br /><a href="https://github.com/DelineaXPM/dsv-github-action/commits?author=andrii-zakurenyi" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/mariiatuzovska"><img src="https://avatars.githubusercontent.com/u/41679258?v=4?s=100" width="100px;" alt="Mariia"/><br /><sub><b>Mariia</b></sub></a><br /><a href="https://github.com/DelineaXPM/dsv-github-action/commits?author=mariiatuzovska" title="Code">💻</a></td>
+      <td align="center"><a href="https://www.sheldonhull.com/"><img src="https://avatars.githubusercontent.com/u/3526320?v=4?s=100" width="100px;" alt="sheldonhull"/><br /><sub><b>sheldonhull</b></sub></a><br /><a href="https://github.com/DelineaXPM/dsv-github-action/commits?author=sheldonhull" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/andrii-zakurenyi"><img src="https://avatars.githubusercontent.com/u/85106843?v=4?s=100" width="100px;" alt="andrii-zakurenyi"/><br /><sub><b>andrii-zakurenyi</b></sub></a><br /><a href="https://github.com/DelineaXPM/dsv-github-action/commits?author=andrii-zakurenyi" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/gg-delinea"><img src="https://avatars.githubusercontent.com/u/99193946?v=4?s=100" width="100px;" alt="gg-delinea"/><br /><sub><b>gg-delinea</b></sub></a><br /><a href="#userTesting-gg-delinea" title="User Testing">📓</a></td>
     </tr>
   </tbody>
+  <tfoot>
+    
+  </tfoot>
 </table>
 
 <!-- markdownlint-restore -->
