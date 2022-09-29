@@ -82,6 +82,7 @@ dsv policy create \
   --actions 'read' \
   --effect 'allow' \
   --subjects "roles:$rolename" \
+  --desc "${desc}" \
   --resources "${secretpath}:<.*>"
 ```
 
