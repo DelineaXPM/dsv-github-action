@@ -1,0 +1,21 @@
+---
+name: release-composite
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+  test:
+    uses: ./.github/workflows/test.yml
+  integration:
+    needs: [lint, test]
+    uses: ./.github/workflows/integration.yml
+  release:
+    needs: integration
+    uses: ./.github/workflows/release.yml
