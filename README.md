@@ -65,7 +65,7 @@ gh secret set DSV_CLIENT_ID --body "$( echo "${clientcred}" | jq '.clientId' )"
 gh secret set DSV_CLIENT_SECRET --body "$( echo "${clientcred}" | jq '.clientSecret')"
 ```
 
-For further setup, here's how you could create extend that script block above with also creating a secret and the policy to read just this secret.
+For further setup, here's how you could extend that script block above with also creating a secret and the policy to read just this secret.
 
 ```shell
 # Create a secret
@@ -86,7 +86,7 @@ dsv policy create \
   --resources "${secretpath}:<.*>"
 ```
 
-## GitHub usage example
+## Usage
 
 See [integration.yaml](.github/workflows/integration.yaml) for an example of how to use this to retrieve secrets and use outputs on other tasks.
 
@@ -110,7 +110,7 @@ jobs:
           setEnv: false
           retrieve: |
             [
-             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1" }
+             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"}
             ]
 ```
 
@@ -132,12 +132,12 @@ jobs:
           setEnv: true
           retrieve: |
             [
-             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "MY_ENV_VAR" }
+             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"}
             ]
       - name: validate-first-value
         if: always()
         run: |
-          "This is a secret value you shouldn't echo 👉 ${{ steps.dsv.outputs.MY_ENV_VAR }}"
+          "This is a secret value you shouldn't echo 👉 ${{ steps.dsv.outputs.RETURN_VALUE_1 }}"
 ```
 
 ### Retrieve 2 Values from Same Secret
@@ -147,8 +147,8 @@ The json expects an array, so just add a new line.
 ```yaml
 retrieve: |
   [
-   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_1" },
-   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value2", "outputVariable": "MY_ENV_VAR_2" }
+   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"},
+   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value2", "outputVariable": "RETURN_VALUE_2"}
   ]
 ```
 
@@ -159,8 +159,8 @@ retrieve: |
 ```yaml
 retrieve: |
   [
-   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_1" },
-   {"secretPath": "ci:tests:dsv-github-action:secret-02", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_2" }
+   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"},
+   {"secretPath": "ci:tests:dsv-github-action:secret-02", "secretKey": "value1", "outputVariable": "RETURN_VALUE_2"}
   ]
 ```
 
