@@ -20,7 +20,7 @@ jobs:
   test:
     uses: ./.github/workflows/test.yml
   integration:
-    needs: [lint, test]
+    needs: test
     uses: ./.github/workflows/integration.yml
   release:
     needs: integration
