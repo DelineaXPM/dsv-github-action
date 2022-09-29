@@ -25,7 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: dsv
-        uses: delineaxpm/dsv-github-action@main # renovate: tag=v1
+        # If using as a template outside of the actual repo, you sould reference like this instead:
+        # uses: DelineaXPM/dsv-github-action@v1 # renovate: tag=v1
+        uses: DelineaXPM/dsv-github-action@main # renovate: tag=v1
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
