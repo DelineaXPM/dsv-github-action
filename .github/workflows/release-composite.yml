@@ -8,6 +8,12 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
+
+permissions:
+  pull-requests: write
+  contents: read # Because it needs to read the configuration file
+  checks: write
+
 jobs:
   lint:
     uses: ./.github/workflows/lint.yml
