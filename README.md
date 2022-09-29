@@ -58,11 +58,11 @@ dsv role create --name "${rolename}"
 clientcred=$(dsv client create --role "${rolename}" --plain | jq -c)
 
 # configure the dsv server, such as mytenant.secretsvaultcloud.com
-gh secret set DSV_CLIENT_ID
+gh secret set DSV_SERVER
 
 # use the generated client credentials in your repo
-gh secret set DSV_CLIENT_ID --body "$( echo "${clientcred}" | jq '.clientId' )"
-gh secret set DSV_CLIENT_SECRET --body "$( echo "${clientcred}" | jq '.clientSecret')"
+gh secret set DSV_CLIENT_ID --body "$( echo "${clientcred}" | jq '.clientId' -r )"
+gh secret set DSV_CLIENT_SECRET --body "$( echo "${clientcred}" | jq '.clientSecret' -r )"
 ```
 
 For further setup, here's how you could extend that script block above with also creating a secret and the policy to read just this secret.
@@ -83,12 +83,12 @@ dsv policy create \
   --effect 'allow' \
   --subjects "roles:$rolename" \
   --desc "${desc}" \
-  --resources "${secretpath}:<.*>"
+  --resources "secrets:${secretpath}:<.*>"
 ```
 
 ## Usage
 
-See [integration.yaml](.github/workflows/integration.yaml) for an example of how to use this to retrieve secrets and use outputs on other tasks.
+See [integration.yml](.github/workflows/integration.yml) for an example of how to use this to retrieve secrets and use outputs on other tasks.
 
 ## Other Usage Examples
 
@@ -102,7 +102,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: dsv
-        uses: delineaxpm/dsv-github-action@v1 # renovate: tag=v1
+        uses: DelineaXPM/dsv-github-action@v1 # renovate: tag=v1
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
@@ -124,7 +124,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: dsv
-        uses: delineaxpm/dsv-github-action@v1 # renovate: tag=v1
+        uses: DelineaXPM/dsv-github-action@v1 # renovate: tag=v1
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
