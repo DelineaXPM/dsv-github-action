@@ -19,7 +19,7 @@ on:
 #   contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   integration:
     runs-on: ubuntu-latest
