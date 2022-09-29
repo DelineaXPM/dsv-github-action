@@ -82,7 +82,6 @@ dsv policy create \
   --actions 'read' \
   --effect 'allow' \
   --subjects "roles:$rolename" \
-  --desc "${desc}" \
   --resources "${secretpath}:<.*>"
 ```
 
@@ -110,7 +109,7 @@ jobs:
           setEnv: false
           retrieve: |
             [
-             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1" }
+             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"}
             ]
 ```
 
@@ -132,12 +131,12 @@ jobs:
           setEnv: true
           retrieve: |
             [
-             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "MY_ENV_VAR" }
+             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"}
             ]
       - name: validate-first-value
         if: always()
         run: |
-          "This is a secret value you shouldn't echo 👉 ${{ steps.dsv.outputs.MY_ENV_VAR }}"
+          "This is a secret value you shouldn't echo 👉 ${{ steps.dsv.outputs.RETURN_VALUE_1 }}"
 ```
 
 ### Retrieve 2 Values from Same Secret
@@ -147,8 +146,8 @@ The json expects an array, so just add a new line.
 ```yaml
 retrieve: |
   [
-   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_1" },
-   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value2", "outputVariable": "MY_ENV_VAR_2" }
+   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"},
+   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value2", "outputVariable": "RETURN_VALUE_2"}
   ]
 ```
 
@@ -159,8 +158,8 @@ retrieve: |
 ```yaml
 retrieve: |
   [
-   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_1" },
-   {"secretPath": "ci:tests:dsv-github-action:secret-02", "secretKey": "value1", "outputVariable": "MY_ENV_VAR_2" }
+   {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"},
+   {"secretPath": "ci:tests:dsv-github-action:secret-02", "secretKey": "value1", "outputVariable": "RETURN_VALUE_2"}
   ]
 ```
 
