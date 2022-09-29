@@ -36,6 +36,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "gg-delinea",
+      "name": "gg-delinea",
+      "avatar_url": "https://avatars.githubusercontent.com/u/99193946?v=4",
+      "profile": "https://github.com/gg-delinea",
+      "contributions": [
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7
