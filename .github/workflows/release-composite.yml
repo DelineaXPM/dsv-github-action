@@ -17,11 +17,15 @@ permissions:
 jobs:
   lint:
     uses: ./.github/workflows/lint.yml
+    secrets: inherit
   test:
     uses: ./.github/workflows/test.yml
+    secrets: inherit
   integration:
     needs: test
     uses: ./.github/workflows/integration.yml
+    secrets: inherit
   release:
     needs: integration
     uses: ./.github/workflows/release.yml
+    secrets: inherit
