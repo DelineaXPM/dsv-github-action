@@ -36,4 +36,5 @@ lint:
     - linters: [ALL]
       paths:
         - .devcontainer/library-scripts
+        - .devcontainer/init
         - vendor/*

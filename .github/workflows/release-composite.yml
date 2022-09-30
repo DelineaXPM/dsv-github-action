@@ -18,6 +18,8 @@ jobs:
   lint:
     uses: ./.github/workflows/lint.yml
     secrets: inherit
+    inputs:
+      github-ref: ${{ github.ref }}
   test:
     uses: ./.github/workflows/test.yml
     secrets: inherit

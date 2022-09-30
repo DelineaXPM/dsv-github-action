@@ -44,7 +44,7 @@ snapshot:
 changelog:
   skip: false
   sort: asc
-  type: github
+  use: github
   groups:
     - title: Features
       regexp: "^.*feat[(\\w)]*:+.*$"
