@@ -1,6 +1,6 @@
 # Note: You can use any Debian/Ubuntu based image you want.
 FROM mcr.microsoft.com/vscode/devcontainers/universal:2-focal
-
+ENV SHELL=/bin/bash
 
 # Enable new "BUILDKIT" mode for Docker CLI
 ENV DOCKER_BUILDKIT=1
@@ -37,10 +37,10 @@ RUN apt-get update && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL
 VOLUME [ "/var/lib/docker" ]
 ENTRYPOINT ["/usr/local/share/docker-init.sh"]
 CMD ["sleep", "infinity"]
-RUN curl -sfL https://direnv.net/install.sh | bash
-
+RUN /bin/bash -c 'set -euo pipefail && curl -sfL https://direnv.net/install.sh | bash'
 USER ${USERNAME}
 RUN go install github.com/magefile/mage@latest && go install github.com/charmbracelet/glow@latest
-RUN python3 -m pip install --upgrade pip --user && python3 -m pip install pre-commit --user
+# trunk-ignore(hadolint/DL3013)
+RUN python3 -m pip install --upgrade pip --user --no-cache-dir && python3 -m pip install pre-commit --user --no-cache-dir
 COPY files/.zshrc /home/${USERNAME}/.zshrc
 COPY files/first-run-notice.txt /home/${USERNAME}/first-run-notice.txt
