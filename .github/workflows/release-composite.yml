@@ -11,8 +11,10 @@ concurrency:
 
 permissions:
   pull-requests: write
-  contents: read # Because it needs to read the configuration file
   checks: write
+  # NOTE: individual jobs define more narrowly scoped permissions.
+  # Release requires so must be defined here
+  contents: write
 
 jobs:
   lint:
