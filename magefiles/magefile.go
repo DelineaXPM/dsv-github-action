@@ -12,6 +12,7 @@ import (
 	"github.com/magefile/mage/sh"
 	"github.com/pterm/pterm"
 	"github.com/sheldonhull/magetools/ci"
+	"github.com/sheldonhull/magetools/pkg/req"
 	"github.com/sheldonhull/magetools/tooling"
 
 	// mage:import
@@ -160,5 +161,18 @@ func (Test) Integration() error {
 		"--rm",
 		"-v", filepath.Join(wd, ".cache")+":"+"/app/.cache:rw",
 		constants.LocalDockerRegistryPathQualified+":"+currentDescribedTag,
+	)
+}
+
+func Changelog() error {
+	binary, err := req.ResolveBinaryByInstall("git-chglog", "github.com/git-chglog/git-chglog/cmd/git-chglog@latest")
+	if err != nil {
+		pterm.Error.Println("unable to install binary")
+		return err
+	}
+
+	return sh.RunV(
+		binary,
+		"--output", "CHANGELOG.md",
 	)
 }

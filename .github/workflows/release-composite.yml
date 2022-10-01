@@ -2,9 +2,12 @@
 name: release-composite
 on:
   push:
-    tags:
-      - 'v*'
+    #   tags:
+    #     - 'v*'
+    branches: [main]
+    paths: [CHANGELOG.md] # your changelog file if different
   workflow_dispatch:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true

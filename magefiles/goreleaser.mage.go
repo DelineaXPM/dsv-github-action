@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/magefile/mage/sh"
 	"github.com/pterm/pterm"
@@ -83,11 +84,28 @@ func Release() error {
 		return err
 	}
 
+	changieBinary, err := req.ResolveBinaryByInstall("git-chglog", "github.com/git-chglog/git-chglog/cmd/git-chglog@latest")
+	if err != nil {
+		pterm.Error.Println("unable to install changelog binary")
+		return err
+	}
+	releaseVersion, err := sh.Output(changieBinary, "latest")
+	if err != nil {
+		pterm.Warning.Printfln("changie pulling latest release note version failure: %v", err)
+	}
+	cleanVersion := strings.TrimSpace(releaseVersion)
 	releaserArgs := []string{
 		"release",
 		"--rm-dist",
+		"--skip-validate",
+		fmt.Sprintf("--release-notes=\".changes/%s.md\"", cleanVersion),
 	}
 	pterm.Debug.Printfln("goreleaser: %+v", releaserArgs)
 
-	return sh.RunV(binary, releaserArgs...)
+	return sh.RunWithV(map[string]string{
+		"GORELEASER_CURRENT_TAG": cleanVersion,
+	},
+		binary,
+		releaserArgs...,
+	)
 }
