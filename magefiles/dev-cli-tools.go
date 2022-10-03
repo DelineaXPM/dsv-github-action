@@ -12,10 +12,11 @@ var ToolList = []string{ //nolint:gochecknoglobals // ok to be global for toolin
 }
 
 // CIToolList is the minimum needed for CI invocation like GitHub actions.
+// Will remove later, as most of these are installed on demand now instead of requiring upfront.
 var CIToolList = []string{ //nolint:gochecknoglobals // ok to be global for tooling setup
 	// "github.com/git-chglog/git-chglog/cmd/git-chglog@latest", // Git-chglog provides changelog automation.
-	"github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
-	"github.com/goreleaser/goreleaser@latest",
-	"gotest.tools/gotestsum@latest", // Gotestsum provides improved console output for tests as well as additional test output for CI systems.
+	// "github.com/golangci/golangci-lint/cmd/golangci-lint@latest",. // installed by trunk
+	// "github.com/goreleaser/goreleaser@latest", // installed on demand
+	// "gotest.tools/gotestsum@latest", // Gotestsum provides improved console output for tests as well as additional test output for CI systems.
 
 }
