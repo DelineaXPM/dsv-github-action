@@ -9,51 +9,23 @@ atomicgo.dev/keyboard/keys
 # bitbucket.org/creachadair/shell v0.0.7
 ## explicit; go 1.16
 bitbucket.org/creachadair/shell
-# github.com/Masterminds/goutils v1.1.1
-## explicit
-github.com/Masterminds/goutils
-# github.com/Masterminds/semver/v3 v3.1.1
-## explicit; go 1.12
-github.com/Masterminds/semver/v3
-# github.com/Masterminds/sprig/v3 v3.2.2
-## explicit; go 1.13
-github.com/Masterminds/sprig/v3
 # github.com/bitfield/script v0.20.2
 ## explicit; go 1.12
 github.com/bitfield/script
 # github.com/caarlos0/env/v6 v6.10.1
 ## explicit; go 1.17
 github.com/caarlos0/env/v6
-# github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
-## explicit
-github.com/chzyer/readline
 # github.com/containerd/console v1.0.3
 ## explicit; go 1.13
 github.com/containerd/console
-# github.com/cpuguy83/go-md2man/v2 v2.0.2
-## explicit; go 1.11
-github.com/cpuguy83/go-md2man/v2/md2man
 # github.com/dustin/go-humanize v1.0.0
 ## explicit
 github.com/dustin/go-humanize
-# github.com/google/uuid v1.1.2
-## explicit
-github.com/google/uuid
+# github.com/google/go-cmp v0.5.8
+## explicit; go 1.13
 # github.com/gookit/color v1.5.0
 ## explicit; go 1.13
 github.com/gookit/color
-# github.com/huandu/xstrings v1.3.2
-## explicit; go 1.12
-github.com/huandu/xstrings
-# github.com/icholy/replace v0.6.0
-## explicit; go 1.14
-github.com/icholy/replace
-# github.com/imdario/mergo v0.3.12
-## explicit; go 1.13
-github.com/imdario/mergo
-# github.com/inconshreveable/mousetrap v1.0.0
-## explicit
-github.com/inconshreveable/mousetrap
 # github.com/itchyny/gojq v0.12.7
 ## explicit; go 1.16
 github.com/itchyny/gojq
@@ -70,29 +42,12 @@ github.com/logrusorgru/aurora
 ## explicit; go 1.12
 github.com/magefile/mage/mg
 github.com/magefile/mage/sh
-# github.com/manifoldco/promptui v0.9.0
-## explicit; go 1.12
-github.com/manifoldco/promptui
-github.com/manifoldco/promptui/list
-github.com/manifoldco/promptui/screenbuf
 # github.com/matryer/is v1.4.0
 ## explicit; go 1.14
 github.com/matryer/is
 # github.com/mattn/go-runewidth v0.0.13
 ## explicit; go 1.9
 github.com/mattn/go-runewidth
-# github.com/miniscruff/changie v1.9.1
-## explicit; go 1.18
-github.com/miniscruff/changie
-github.com/miniscruff/changie/cmd
-github.com/miniscruff/changie/core
-github.com/miniscruff/changie/shared
-# github.com/mitchellh/copystructure v1.2.0
-## explicit; go 1.15
-github.com/mitchellh/copystructure
-# github.com/mitchellh/reflectwalk v1.0.2
-## explicit
-github.com/mitchellh/reflectwalk
 # github.com/pterm/pterm v0.12.46
 ## explicit; go 1.15
 github.com/pterm/pterm
@@ -100,9 +55,6 @@ github.com/pterm/pterm/internal
 # github.com/rivo/uniseg v0.2.0
 ## explicit; go 1.12
 github.com/rivo/uniseg
-# github.com/russross/blackfriday/v2 v2.1.0
-## explicit
-github.com/russross/blackfriday/v2
 # github.com/sheldonhull/magetools v0.0.12
 ## explicit; go 1.18
 github.com/sheldonhull/magetools/ci
@@ -113,24 +65,6 @@ github.com/sheldonhull/magetools/pkg/req
 github.com/sheldonhull/magetools/precommit
 github.com/sheldonhull/magetools/secrets
 github.com/sheldonhull/magetools/tooling
-# github.com/shopspring/decimal v1.2.0
-## explicit; go 1.13
-github.com/shopspring/decimal
-# github.com/spf13/afero v1.9.2
-## explicit; go 1.16
-github.com/spf13/afero
-github.com/spf13/afero/internal/common
-github.com/spf13/afero/mem
-# github.com/spf13/cast v1.4.1
-## explicit
-github.com/spf13/cast
-# github.com/spf13/cobra v1.5.0
-## explicit; go 1.15
-github.com/spf13/cobra
-github.com/spf13/cobra/doc
-# github.com/spf13/pflag v1.0.5
-## explicit; go 1.12
-github.com/spf13/pflag
 # github.com/stretchr/testify v1.7.2
 ## explicit; go 1.13
 # github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778
@@ -139,12 +73,6 @@ github.com/xo/terminfo
 # github.com/ztrue/tracerr v0.3.0
 ## explicit
 github.com/ztrue/tracerr
-# golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa
-## explicit; go 1.17
-golang.org/x/crypto/bcrypt
-golang.org/x/crypto/blowfish
-golang.org/x/crypto/pbkdf2
-golang.org/x/crypto/scrypt
 # golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3
 ## explicit; go 1.17
 golang.org/x/mod/internal/lazyregexp
@@ -169,6 +97,3 @@ golang.org/x/text/unicode/norm
 ## explicit; go 1.11
 golang.org/x/xerrors
 golang.org/x/xerrors/internal
-# gopkg.in/yaml.v2 v2.4.0
-## explicit; go 1.15
-gopkg.in/yaml.v2
