@@ -95,9 +95,9 @@ func Release() error {
 		pterm.Warning.Printfln("changie pulling latest release note version failure: %v", err)
 	}
 	cleanVersion := strings.TrimSpace(releaseVersion)
-	cleanpath := filepath.Join(".changes", cleanVersion)
+	cleanpath := filepath.Join(".changes", cleanVersion+".md")
 	if os.Getenv("GITHUB_WORKSPACE") != "" {
-		cleanpath = filepath.Join(os.Getenv("GITHUB_WORKSPACE"), ".changes", cleanVersion)
+		cleanpath = filepath.Join(os.Getenv("GITHUB_WORKSPACE"), ".changes", cleanVersion+".md")
 	}
 
 	releaserArgs := []string{
