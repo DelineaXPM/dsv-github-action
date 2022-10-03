@@ -104,3 +104,8 @@ DSV_RETRIEVE=[{"secretPath": "ci:tests:dsv-github-action:secret-01", "secret_key
 RUNNER_DEBUG=true
 EOT
 ```
+
+## Tracking Changies
+
+Use `changie new` to document new changes that aren't yet tagged for release.
+Once changes worth releases are done, see [RELEASE.md](RELEASE.md).
