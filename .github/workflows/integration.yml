@@ -19,8 +19,6 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
-env:
-  GOFLAGS: -mod=vendor
 jobs:
   integration:
     runs-on: ubuntu-latest

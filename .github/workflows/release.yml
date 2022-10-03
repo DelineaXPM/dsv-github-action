@@ -9,8 +9,6 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-env:
-  GOFLAGS: -mod=vendor
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
