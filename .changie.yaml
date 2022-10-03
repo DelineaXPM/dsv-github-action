@@ -1,3 +1,4 @@
+---
 changesDir: .changes
 unreleasedDir: unreleased
 headerPath: header.tpl.md

@@ -32,9 +32,16 @@ lint:
     - shfmt@3.5.0
     - taplo@release-taplo-cli-0.7.0
     - yamllint@1.28.0
+  threshold:
+    - linters: [markdownlint]
+      level: high
   ignore:
     - linters: [ALL]
       paths:
         - .devcontainer/library-scripts
         - .devcontainer/init
         - vendor/*
+    - linters: [markdownlint]
+      paths:
+        # in progress changelog notes
+        - .changes/*.md
