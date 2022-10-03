@@ -45,3 +45,6 @@ lint:
       paths:
         # in progress changelog notes
         - .changes/*.md
+    - linters: [yamllint]
+      paths:
+        - .changes/unreleased/*.yaml
