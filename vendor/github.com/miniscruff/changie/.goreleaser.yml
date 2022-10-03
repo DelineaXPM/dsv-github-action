@@ -1,0 +1,68 @@
+# Make sure to check the documentation at http://goreleaser.com
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod download
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - 386
+      - amd64
+      - arm64
+archives:
+  - format_overrides:
+    - goos: windows
+      format: zip
+release:
+  github:
+  prerelease: auto
+nfpms:
+  - homepage: https://changie.dev
+    description: Automated changelog tool for preparing releases with lots of customization options.
+    license: MIT
+    maintainer: Ronnie Smith <miniscruff@hey.com>
+    formats:
+    - deb
+    - rpm
+brews:
+  - tap:
+      owner: miniscruff
+      name: changie
+    homepage: https://changie.dev
+    description: Automated changelog tool for preparing releases with lots of customization options.
+    license: MIT
+    skip_upload: auto
+scoop:
+  bucket:
+    owner: miniscruff
+    name: changie
+  commit_msg_template: "Scoop update for {{ .ProjectName }} version {{ .Tag }}"
+  homepage: https://changie.dev
+  description: Automated changelog tool for preparing releases with lots of customization options.
+  license: MIT
+dockers:
+  - goos: linux
+    goarch: amd64
+    image_templates:
+      - "ghcr.io/miniscruff/changie:v{{ .Major }}"
+      - "ghcr.io/miniscruff/changie:v{{ .Major }}.{{ .Minor }}"
+      - "ghcr.io/miniscruff/changie:v{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
+      - "ghcr.io/miniscruff/changie:latest"
+    build_flag_templates:
+    - "--pull"
+    - "--label=org.opencontainers.image.created={{.Date}}"
+    - "--label=org.opencontainers.image.title={{.ProjectName}}"
+    - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+    - "--label=org.opencontainers.image.version={{.Version}}"
+    - "--platform=linux/amd64"
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  skip: false

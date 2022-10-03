@@ -84,7 +84,7 @@ func Release() error {
 		return err
 	}
 
-	changieBinary, err := req.ResolveBinaryByInstall("git-chglog", "github.com/git-chglog/git-chglog/cmd/git-chglog@latest")
+	changieBinary, err := req.ResolveBinaryByInstall("changie", "github.com/miniscruff/changie@latest")
 	if err != nil {
 		pterm.Error.Println("unable to install changelog binary")
 		return err
