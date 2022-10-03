@@ -98,7 +98,7 @@ func Release() error {
 		"release",
 		"--rm-dist",
 		"--skip-validate",
-		fmt.Sprintf("--release-notes=\".changes/%s\"", cleanVersion),
+		fmt.Sprintf("--release-notes=.changes/%s", cleanVersion),
 	}
 	pterm.Debug.Printfln("goreleaser: %+v", releaserArgs)
 
