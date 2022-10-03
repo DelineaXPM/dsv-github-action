@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/magefile/mage/sh"
@@ -94,11 +95,16 @@ func Release() error {
 		pterm.Warning.Printfln("changie pulling latest release note version failure: %v", err)
 	}
 	cleanVersion := strings.TrimSpace(releaseVersion)
+	cleanpath := filepath.Join(".changes", cleanVersion)
+	if os.Getenv("GITHUB_WORKSPACE") != "" {
+		cleanpath = filepath.Join(os.Getenv("GITHUB_WORKSPACE"), ".changes", cleanVersion)
+	}
+
 	releaserArgs := []string{
 		"release",
 		"--rm-dist",
 		"--skip-validate",
-		fmt.Sprintf("--release-notes=.changes/%s", cleanVersion),
+		fmt.Sprintf("--release-notes=.changes/%s", cleanpath),
 	}
 	pterm.Debug.Printfln("goreleaser: %+v", releaserArgs)
 
