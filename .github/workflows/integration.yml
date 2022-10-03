@@ -15,9 +15,12 @@ on:
         description: setenv (output to envfile)
         default: true
         type: boolean
+        required: false
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
+env:
+  GOFLAGS: -mod=vendor
 jobs:
   integration:
     runs-on: ubuntu-latest
