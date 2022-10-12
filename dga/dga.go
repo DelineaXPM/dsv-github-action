@@ -281,7 +281,12 @@ func DSVGetSecret(client HTTPClient, apiEndpoint, accessToken string, item Secre
 }
 
 func actionSetOutput(key, val string) {
-	fmt.Printf("::set-output name=%s::%s\n", key, val)
+	fmt.Printf("set-output name=%s::%s\n", key, val)
+	actionMaskValue(val)
+}
+
+func actionMaskValue(val string) {
+	fmt.Printf("::add-mask::%s\n", val)
 }
 
 // ActionsOpenEnvFile is used for writing secrets back in GitHub.
