@@ -130,6 +130,9 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 	}
 	pterm.Success.Println("parsed environment variables")
 
+	actionMaskValue(cfg.ClientIDEnv)
+	actionMaskValue(cfg.ClientSecretEnv)
+
 	if cfg.IsDebug {
 		pterm.Info.Println("DEBUG detected, setting debug output to enabled")
 		pterm.EnableDebugMessages()
