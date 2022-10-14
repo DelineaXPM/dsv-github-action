@@ -44,7 +44,7 @@ jobs:
       - name: validate-first-value
         if: always()
         run: |
-          if [ "${{ steps.dsv.outputs.RETURN_VALUE_1 }}" == "${{ secrets.DSV_EXPECTED_VALUE_1 }}" ]; then
+          if [ "${{ env.RETURN_VALUE_1 }}" == "${{ secrets.DSV_EXPECTED_VALUE_1 }}" ]; then
               echo "✅ test value is matched"
               exit 0
           else
@@ -54,7 +54,7 @@ jobs:
       - name: validate-second-value
         if: always()
         run: |
-          if [ "${{ steps.dsv.outputs.RETURN_VALUE_2 }}" == "${{ secrets.DSV_EXPECTED_VALUE_2 }}" ]; then
+          if [ "${{ env.RETURN_VALUE_2 }}" == "${{ secrets.DSV_EXPECTED_VALUE_2 }}" ]; then
               echo "✅ test value is matched"
               exit 0
           else

@@ -87,11 +87,9 @@ dsv policy create \
 
 ## Usage
 
-See [integration.yml](.github/workflows/integration.yml) for an example of how to use this to retrieve secrets and use outputs on other tasks.
+See [integration.yml](.github/workflows/integration.yml) for an example of how to use this to retrieve secrets and use environment variables on other tasks.
 
-## Other Usage Examples
-
-### Set Output to Job Scope Using Environment Variables
+## Example: Set Environment Variables to Job Scope
 
 ```yaml
 jobs:
@@ -113,7 +111,7 @@ jobs:
       - name: validate-first-value
         if: always()
         run: |
-          "This is a secret value you shouldn't echo 👉 ${{ steps.dsv.outputs.RETURN_VALUE_1 }}"
+          "This is a secret value you shouldn't echo 👉 ${{ env.RETURN_VALUE_1 }}"
 ```
 
 ### Retrieve 2 Values from Same Secret
