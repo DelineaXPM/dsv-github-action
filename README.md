@@ -24,12 +24,12 @@ Now, instead of storing all your secrets directly in your GitHub repo configurat
 
 ## Inputs
 
-| Name           | Description                                                    |
-| -------------- | -------------------------------------------------------------- |
-| `domain`       | Tenant domain name (e.g. example.secretsvaultcloud.com).       |
-| `clientId`     | Client ID for authentication.                                  |
-| `clientSecret` | Client Secret for authentication.                              |
-| `retrieve`     | Data to retrieve from DSV in json format.                      |
+| Name           | Description                                              |
+| -------------- | -------------------------------------------------------- |
+| `domain`       | Tenant domain name (e.g. example.secretsvaultcloud.com). |
+| `clientId`     | Client ID for authentication.                            |
+| `clientSecret` | Client Secret for authentication.                        |
+| `retrieve`     | Data to retrieve from DSV in json format.                |
 
 ## Prerequisites
 
