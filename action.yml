@@ -22,9 +22,6 @@ inputs:
   clientSecret:
     description: The generated clientSecret for authenticating. This should be saved as a github action secret in the repository or org.
     required: true
-  setEnv:
-    description: Default true. This will write the resulting secrets using the envfile.
-    required: true
   retrieve:
     description: |
       Formatted as json. See README for details.
@@ -40,5 +37,4 @@ runs:
     DSV_DOMAIN: ${{ inputs.domain }}
     DSV_CLIENT_ID: ${{ inputs.clientId }}
     DSV_CLIENT_SECRET: ${{ inputs.clientSecret }}
-    DSV_SET_ENV: ${{ inputs.setEnv }}
     DSV_RETRIEVE: ${{ inputs.retrieve }}

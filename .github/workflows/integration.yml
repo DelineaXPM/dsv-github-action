@@ -35,7 +35,6 @@ jobs:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
           clientSecret: ${{ secrets.DSV_CLIENT_SECRET }}
-          setEnv: true
           retrieve: |
             [
              {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"},

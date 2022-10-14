@@ -27,8 +27,6 @@ type Config struct {
 	IsDebug bool `env:"RUNNER_DEBUG"`   // IsDebug is based on github action flagging as debug/trace level.
 
 	// DSV SPECIFIC ENV VARIABLES.
-
-	SetEnv          bool   `env:"DSV_SET_ENV"`                         // SetEnv is only for GitHub Actions.
 	DomainEnv       string `env:"DSV_DOMAIN,required"`                 // Tenant domain name (e.g. example.secretsvaultcloud.com).
 	ClientIDEnv     string `env:"DSV_CLIENT_ID,required"`              // Client ID for authentication.
 	ClientSecretEnv string `json:"-" env:"DSV_CLIENT_SECRET,required"` // Client Secret for authentication.
@@ -139,7 +137,6 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 		pterm.Debug.Printfln("IsCI            : %v", cfg.IsCI)
 		pterm.Debug.Printfln("IsDebug         : %v", cfg.IsDebug)
 
-		pterm.Debug.Printfln("SetEnv          : %v", cfg.SetEnv)
 		pterm.Debug.Printfln("DomainEnv       : %v", cfg.DomainEnv)
 		pterm.Debug.Println("ClientIDEnv     : ** value exists, but not exposing in logs **")
 		pterm.Debug.Println("ClientSecretEnv : ** value exists, but not exposing in logs **")
@@ -163,7 +160,7 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 	var envFile *os.File
 
 	// This function will only run if both is CI and SetEnv is detected.
-	if cfg.IsCI && cfg.SetEnv {
+	if cfg.IsCI {
 		envFile, err = ActionsOpenEnvFile(&cfg)
 		if err != nil {
 			pterm.Error.Printfln("unable to run actionsopenEnvFile: %v", err)
@@ -200,17 +197,14 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 		}
 
 		outputKey := item.OutputVariable
-		actionSetOutput(outputKey, val) // TODO: this needs to be correctly set to use the right output variable.
 		pterm.Debug.Printfln("%q: Set output %q to value in %q", item.SecretPath, outputKey, item.SecretKey)
 		pterm.Success.Printfln("actionSetOutput success: %q", outputKey)
 
-		if cfg.SetEnv {
-			if err := ActionsExportVariable(envFile, outputKey, val); err != nil { // TODO: this needs to be correctly set to use the right output variable.
-				pterm.Error.Printfln("%q: unable to export env variable: %v", outputKey, err)
-				return fmt.Errorf("cannot set environment variable")
-			}
-			pterm.Success.Printfln("%q: Set env var %q to value in %q", item, strings.ToUpper(outputKey), item.SecretKey)
+		if err := ActionsExportVariable(envFile, outputKey, val); err != nil { // TODO: this needs to be correctly set to use the right output variable.
+			pterm.Error.Printfln("%q: unable to export env variable: %v", outputKey, err)
+			return fmt.Errorf("cannot set environment variable")
 		}
+		pterm.Success.Printfln("%q: Set env var %q to value in %q", item, strings.ToUpper(outputKey), item.SecretKey)
 	}
 	return nil
 }
@@ -278,10 +272,6 @@ func DSVGetSecret(client HTTPClient, apiEndpoint, accessToken string, item Secre
 	}
 	pterm.Success.Printfln("dsvGetSecret() success")
 	return resp, nil
-}
-
-func actionSetOutput(key, val string) {
-	fmt.Printf("::set-output name=%s::%s\n", key, val)
 }
 
 // ActionsOpenEnvFile is used for writing secrets back in GitHub.

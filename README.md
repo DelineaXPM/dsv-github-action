@@ -29,7 +29,6 @@ Now, instead of storing all your secrets directly in your GitHub repo configurat
 | `domain`       | Tenant domain name (e.g. example.secretsvaultcloud.com).       |
 | `clientId`     | Client ID for authentication.                                  |
 | `clientSecret` | Client Secret for authentication.                              |
-| `setEnv`       | Set environment variables. Applicable only for GitHub Actions. |
 | `retrieve`     | Data to retrieve from DSV in json format.                      |
 
 ## Prerequisites
@@ -92,7 +91,7 @@ See [integration.yml](.github/workflows/integration.yml) for an example of how t
 
 ## Other Usage Examples
 
-### Retrieve A Single Secret Without Setting Env File
+### Set Output to Job Scope Using Environment Variables
 
 ```yaml
 jobs:
@@ -107,29 +106,6 @@ jobs:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
           clientSecret: ${{ secrets.DSV_CLIENT_SECRET }}
-          setEnv: false
-          retrieve: |
-            [
-             {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"}
-            ]
-```
-
-### Set Output to Job Scope Using SetEnv
-
-```yaml
-jobs:
-  integration:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v3
-      - id: dsv
-        uses: DelineaXPM/dsv-github-action@v1 # renovate: tag=v1
-        with:
-          domain: ${{ secrets.DSV_SERVER }}
-          clientId: ${{ secrets.DSV_CLIENT_ID }}
-          clientSecret: ${{ secrets.DSV_CLIENT_SECRET }}
-          setEnv: true
           retrieve: |
             [
              {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"}
