@@ -30,12 +30,12 @@ jobs:
       - id: dsv
         # If using as a template outside of the actual repo, you sould reference like this instead:
         # uses: DelineaXPM/dsv-github-action@v1 # renovate: tag=v1
+        # DelineaXPM/dsv-github-action@main uses the default branch of a public repository
         uses: DelineaXPM/dsv-github-action@main # renovate: tag=v1
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
           clientSecret: ${{ secrets.DSV_CLIENT_SECRET }}
-          setEnv: true
           retrieve: |
             [
              {"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"},
@@ -44,7 +44,7 @@ jobs:
       - name: validate-first-value
         if: always()
         run: |
-          if [ "${{ steps.dsv.outputs.RETURN_VALUE_1 }}" == "${{ secrets.DSV_EXPECTED_VALUE_1 }}" ]; then
+          if [ "${{ env.RETURN_VALUE_1 }}" == "${{ secrets.DSV_EXPECTED_VALUE_1 }}" ]; then
               echo "✅ test value is matched"
               exit 0
           else
@@ -54,7 +54,7 @@ jobs:
       - name: validate-second-value
         if: always()
         run: |
-          if [ "${{ steps.dsv.outputs.RETURN_VALUE_2 }}" == "${{ secrets.DSV_EXPECTED_VALUE_2 }}" ]; then
+          if [ "${{ env.RETURN_VALUE_2 }}" == "${{ secrets.DSV_EXPECTED_VALUE_2 }}" ]; then
               echo "✅ test value is matched"
               exit 0
           else

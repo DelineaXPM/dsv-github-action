@@ -99,8 +99,7 @@ DSV_CLIENT_SECRET=$(dsv secret read "${secretpathclient}" --filter '.data.client
 GITHUB_TOKEN=${GITHUB_TOKEN}
 GITHUB_ENV=/app/.cache/.envfile
 GITHUB_ACTIONS=true
-DSV_SET_ENV=true
-DSV_RETRIEVE=[{"secretPath": "ci:tests:dsv-github-action:secret-01", "secret_key": "", "output_variable": "RETURN_VALUE_1"}]
+DSV_RETRIEVE=[{"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value1", "outputVariable": "RETURN_VALUE_1"},{"secretPath": "ci:tests:dsv-github-action:secret-01", "secretKey": "value2", "outputVariable": "RETURN_VALUE_2"}]
 RUNNER_DEBUG=true
 EOT
 ```
