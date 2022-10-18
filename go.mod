@@ -8,7 +8,7 @@ require (
 	github.com/magefile/mage v1.13.0
 	github.com/matryer/is v1.4.0
 	github.com/pterm/pterm v0.12.46
-	github.com/sheldonhull/magetools v0.0.12
+	github.com/sheldonhull/magetools v1.0.0
 )
 
 require github.com/google/go-cmp v0.5.8 // indirect
