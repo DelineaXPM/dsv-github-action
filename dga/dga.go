@@ -128,6 +128,9 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 	}
 	pterm.Success.Println("parsed environment variables")
 
+	ActionMaskVariable(cfg.ClientIDEnv)
+	ActionMaskVariable(cfg.ClientSecretEnv)
+
 	if cfg.IsDebug {
 		pterm.Info.Println("DEBUG detected, setting debug output to enabled")
 		pterm.EnableDebugMessages()
@@ -204,6 +207,7 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 			pterm.Error.Printfln("%q: unable to export env variable: %v", outputKey, err)
 			return fmt.Errorf("cannot set environment variable")
 		}
+		ActionMaskVariable(val)
 		pterm.Success.Printfln("%q: Set env var %q to value in %q", item, strings.ToUpper(outputKey), item.SecretKey)
 	}
 	return nil
@@ -315,4 +319,8 @@ func ActionsExportVariable(envFile *os.File, key, val string) error {
 	}
 	pterm.Success.Printfln("actionsExportVariable() success")
 	return nil
+}
+
+func ActionMaskVariable(val string) {
+	fmt.Printf("::add-mask::%s\n", val)
 }
