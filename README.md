@@ -97,9 +97,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v3
       - id: dsv
-        uses: DelineaXPM/dsv-github-action@v1 # renovate: tag=v1
+        uses: DelineaXPM/dsv-github-action@v2.0.2
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
