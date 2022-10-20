@@ -6,7 +6,7 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Use Delinea DevOps Secret Vault for retrieval of your secrets.
+Use Delinea DevOps Secrets Vault for retrieval of your secrets.
 
 Now, instead of storing all your secrets directly in your GitHub repo configuration, store client credentials to connect and retrieve the desired secret or multiple secrets from your secure vault.
 
