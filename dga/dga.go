@@ -33,11 +33,6 @@ type Config struct {
 	RetrieveEnv     string `env:"DSV_RETRIEVE,required"`               // JSON formatted string with data to retrieve from DSV.
 }
 
-// RetrieveValues is the struct to put keyvalues into
-//
-//	type RetrieveValues struct {
-//		SecretToRetrieve []SingleValue
-//	}
 type SecretToRetrieve struct {
 	SecretPath     string `json:"secretPath"`
 	SecretKey      string `json:"secretKey"`
