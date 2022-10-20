@@ -15,7 +15,7 @@ Now, instead of storing all your secrets directly in your GitHub repo configurat
 - [Developer](DEVELOPER.md): instructions on running tests, local tooling, and other resources.
 - [DSV Documentation](https://docs.delinea.com/dsv/current?ref=githubrepo)
 - [Download DSV CLI](https://dsv.secretsvaultcloud.com/downloads)
-  Quick install example (adjust to platform/version): `curl -fSsl https://dsv.secretsvaultcloud.com/downloads/cli/1.37.5/dsv-darwin-x64 -o dsv && chmod +x ./dsv && sudo mv ./dsv /usr/local/bin`
+  Quick install example (adjust to platform/version): `curl -fSsl https://dsv.secretsvaultcloud.com/downloads/cli/1.38.1/dsv-darwin-x64 -o dsv && chmod +x ./dsv && sudo mv ./dsv /usr/local/bin`
 - Remaining readme for the usage directions.
 - Install [github-cli](https://cli.github.com/) for easier setup.
   - quick: `brew install gh` or see [installation instructions](https://github.com/cli/cli#installation)
