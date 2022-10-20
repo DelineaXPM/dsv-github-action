@@ -62,7 +62,7 @@ func (cfg *Config) getGithubEnv() (string, error) {
 }
 
 // configure Pterm settings for project based on the detected environment.
-// Github documents their special syntax here: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
+// GitHub documents their special syntax here: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
 func (cfg *Config) configureLogging() {
 	pterm.Info.Println("configureLogging()")
 
@@ -252,7 +252,12 @@ func DSVGetToken(c HTTPClient, apiEndpoint string, cfg *Config) (string, error) 
 	return token, nil
 }
 
-func DSVGetSecret(client HTTPClient, apiEndpoint, accessToken string, item SecretToRetrieve, cfg *Config) (map[string]interface{}, error) {
+func DSVGetSecret(
+	client HTTPClient,
+	apiEndpoint, accessToken string,
+	item SecretToRetrieve,
+	cfg *Config,
+) (map[string]interface{}, error) {
 	pterm.Info.Println("dsvGetSecret()")
 	// Endpoint := apiEndpoint + "/secrets/" + secretPath.
 	endpoint, err := url.JoinPath(apiEndpoint, "secrets", item.SecretPath)
@@ -300,7 +305,11 @@ func ActionsOpenEnvFile(cfg *Config) (*os.File, error) {
 		pterm.Info.Printfln("envFileName permission: %#o", fi.Mode().Perm())
 	}
 
-	envFile, err := os.OpenFile(envFileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, PermissionReadWriteOwner) //nolint:nosnakecase // these are standard package values and ok to leave snakecase.
+	envFile, err := os.OpenFile(
+		envFileName,
+		os.O_APPEND|os.O_CREATE|os.O_WRONLY, //nolint:nosnakecase // these are standard package values and ok to leave snakecase.
+		PermissionReadWriteOwner,
+	)
 	if errors.Is(err, os.ErrNotExist) {
 		// See if we can provide some useful info on the existing permissions.
 		return nil, fmt.Errorf("envfile doesn't exist or has denied permission %s: %w", envFileName, err)
