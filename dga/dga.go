@@ -44,7 +44,7 @@ type SecretToRetrieve struct {
 	OutputVariable string `json:"outputVariable"`
 }
 
-// getGithubEnv reads fromt he current step target github action
+// getGithubEnv reads from the current step target github action
 // The path on the runner to the file that sets environment variables from workflow commands.
 // This file is unique to the current step and changes for each step in a job.
 // For example, /home/runner/work/_temp/_runner_file_commands/set_env_87406d6e-4979-4d42-98e1-3dab1f48b13a.
