@@ -201,7 +201,6 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 
 		outputKey := item.OutputVariable
 		pterm.Debug.Printfln("%q: Set output %q to value in %q", item.SecretPath, outputKey, item.SecretKey)
-		pterm.Success.Printfln("actionSetOutput success: %q", outputKey)
 
 		if err := ActionsExportVariable(envFile, outputKey, val); err != nil { // TODO: this needs to be correctly set to use the right output variable.
 			pterm.Error.Printfln("%q: unable to export env variable: %v", outputKey, err)
