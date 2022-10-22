@@ -16,13 +16,7 @@ import (
 	"github.com/sheldonhull/magetools/tooling"
 
 	// mage:import
-	"github.com/sheldonhull/magetools/gittools"
-	// mage:import
 	"github.com/sheldonhull/magetools/gotools"
-	// mage:import
-	"github.com/sheldonhull/magetools/precommit"
-	//mage:import
-	_ "github.com/sheldonhull/magetools/secrets"
 
 	"github.com/bitfield/script"
 )
@@ -71,8 +65,7 @@ func Init() error {
 	// These can run in parallel as different toolchains.
 	mg.Deps(
 		(gotools.Go{}.Init),
-		(gittools.Gittools{}.Init),
-		(precommit.Precommit{}.Init),
+
 		(InstallTrunk),
 	)
 	return nil

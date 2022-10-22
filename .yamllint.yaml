@@ -2,7 +2,7 @@
 extends: default
 rules:
   line-length: disable
-
+  document-start: disable # standard only requires this when directives are used, which is rarely done
   comments:
     require-starting-space: false
     ignore-shebangs: true

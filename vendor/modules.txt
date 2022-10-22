@@ -23,8 +23,8 @@ github.com/containerd/console
 github.com/dustin/go-humanize
 # github.com/google/go-cmp v0.5.8
 ## explicit; go 1.13
-# github.com/gookit/color v1.5.0
-## explicit; go 1.13
+# github.com/gookit/color v1.5.2
+## explicit; go 1.16
 github.com/gookit/color
 # github.com/itchyny/gojq v0.12.7
 ## explicit; go 1.16
@@ -38,62 +38,59 @@ github.com/lithammer/fuzzysearch/fuzzy
 # github.com/logrusorgru/aurora v2.0.3+incompatible
 ## explicit
 github.com/logrusorgru/aurora
-# github.com/magefile/mage v1.13.0
+# github.com/magefile/mage v1.14.0
 ## explicit; go 1.12
 github.com/magefile/mage/mg
 github.com/magefile/mage/sh
 # github.com/matryer/is v1.4.0
 ## explicit; go 1.14
 github.com/matryer/is
-# github.com/mattn/go-runewidth v0.0.13
+# github.com/mattn/go-runewidth v0.0.14
 ## explicit; go 1.9
 github.com/mattn/go-runewidth
-# github.com/pterm/pterm v0.12.46
-## explicit; go 1.15
+# github.com/pterm/pterm v0.12.49
+## explicit; go 1.18
 github.com/pterm/pterm
 github.com/pterm/pterm/internal
-# github.com/rivo/uniseg v0.2.0
-## explicit; go 1.12
+# github.com/rivo/uniseg v0.4.2
+## explicit; go 1.18
 github.com/rivo/uniseg
-# github.com/sheldonhull/magetools v0.0.12
+# github.com/sheldonhull/magetools v1.0.0
 ## explicit; go 1.18
 github.com/sheldonhull/magetools/ci
-github.com/sheldonhull/magetools/gittools
 github.com/sheldonhull/magetools/gotools
 github.com/sheldonhull/magetools/pkg/magetoolsutils
 github.com/sheldonhull/magetools/pkg/req
-github.com/sheldonhull/magetools/precommit
-github.com/sheldonhull/magetools/secrets
 github.com/sheldonhull/magetools/tooling
-# github.com/stretchr/testify v1.7.2
-## explicit; go 1.13
-# github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778
-## explicit; go 1.15
+# github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e
+## explicit; go 1.19
 github.com/xo/terminfo
 # github.com/ztrue/tracerr v0.3.0
 ## explicit
 github.com/ztrue/tracerr
-# golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3
+# golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4
 ## explicit; go 1.17
 golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/modfile
 golang.org/x/mod/module
 golang.org/x/mod/semver
-# golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f
+# golang.org/x/sys v0.1.0
 ## explicit; go 1.17
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/plan9
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
+# golang.org/x/term v0.1.0
 ## explicit; go 1.17
 golang.org/x/term
-# golang.org/x/text v0.3.7
+# golang.org/x/text v0.4.0
 ## explicit; go 1.17
+golang.org/x/text/cases
+golang.org/x/text/internal
+golang.org/x/text/internal/language
+golang.org/x/text/internal/language/compact
+golang.org/x/text/internal/tag
+golang.org/x/text/language
 golang.org/x/text/runes
 golang.org/x/text/transform
 golang.org/x/text/unicode/norm
-# golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
-## explicit; go 1.11
-golang.org/x/xerrors
-golang.org/x/xerrors/internal

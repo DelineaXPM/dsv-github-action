@@ -3,7 +3,7 @@ package main
 // ToolList is a list of tools that are installed as binaries for development usage.
 // This list gets installed to go bin directory once `mage init` is run.
 // This is for binaries that need to be invoked as cli tools, not packages.
-var ToolList = []string{ //nolint:gochecknoglobals // ok to be global for tooling setup
+var ToolList = []string{
 	"mvdan.cc/gofumpt@latest",
 	"github.com/iwittkau/mage-select@latest",
 	"github.com/mfridman/tparse@latest", // Tparse provides nice formatted go test console output.
@@ -13,7 +13,7 @@ var ToolList = []string{ //nolint:gochecknoglobals // ok to be global for toolin
 
 // CIToolList is the minimum needed for CI invocation like GitHub actions.
 // Will remove later, as most of these are installed on demand now instead of requiring upfront.
-var CIToolList = []string{ //nolint:gochecknoglobals // ok to be global for tooling setup
+var CIToolList = []string{
 	// "github.com/git-chglog/git-chglog/cmd/git-chglog@latest", // Git-chglog provides changelog automation.
 	// "github.com/golangci/golangci-lint/cmd/golangci-lint@latest",. // installed by trunk
 	// "github.com/goreleaser/goreleaser@latest", // installed on demand
