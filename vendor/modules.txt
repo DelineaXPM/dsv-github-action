@@ -38,7 +38,7 @@ github.com/lithammer/fuzzysearch/fuzzy
 # github.com/logrusorgru/aurora v2.0.3+incompatible
 ## explicit
 github.com/logrusorgru/aurora
-# github.com/magefile/mage v1.13.0
+# github.com/magefile/mage v1.14.0
 ## explicit; go 1.12
 github.com/magefile/mage/mg
 github.com/magefile/mage/sh
@@ -55,15 +55,12 @@ github.com/pterm/pterm/internal
 # github.com/rivo/uniseg v0.2.0
 ## explicit; go 1.12
 github.com/rivo/uniseg
-# github.com/sheldonhull/magetools v0.0.12
+# github.com/sheldonhull/magetools v1.0.0
 ## explicit; go 1.18
 github.com/sheldonhull/magetools/ci
-github.com/sheldonhull/magetools/gittools
 github.com/sheldonhull/magetools/gotools
 github.com/sheldonhull/magetools/pkg/magetoolsutils
 github.com/sheldonhull/magetools/pkg/req
-github.com/sheldonhull/magetools/precommit
-github.com/sheldonhull/magetools/secrets
 github.com/sheldonhull/magetools/tooling
 # github.com/stretchr/testify v1.7.2
 ## explicit; go 1.13
