@@ -1,0 +1,9 @@
+---
+kind: 🐛 Bug Fix
+body: use correct log prefixes which improves integration with GitHub Actions platform
+time: 2022-10-26T22:22:27.074552+03:00
+custom:
+  azure-boards-workitemid-fixed: ''
+  azure-boards-workitemid-related: ''
+  github-contributor: ''
+  github-link: ''
