@@ -33,6 +33,8 @@ type Config struct {
 	RetrieveEnv     string `env:"DSV_RETRIEVE,required"`               // JSON formatted string with data to retrieve from DSV.
 }
 
+// SecretToRetrieve defines JSON format of elements that expected in DSV_RETRIEVE list.
+//nolint:tagliatelle // Here 'camel' casing is used instead of 'kebab'.
 type SecretToRetrieve struct {
 	SecretPath     string `json:"secretPath"`
 	SecretKey      string `json:"secretKey"`
