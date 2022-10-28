@@ -33,6 +33,8 @@ type Config struct {
 	RetrieveEnv     string `env:"DSV_RETRIEVE,required"`               // JSON formatted string with data to retrieve from DSV.
 }
 
+// SecretToRetrieve defines JSON format of elements that expected in DSV_RETRIEVE list.
+//nolint:tagliatelle // Here 'camel' casing is used instead of 'kebab'.
 type SecretToRetrieve struct {
 	SecretPath     string `json:"secretPath"`
 	SecretKey      string `json:"secretKey"`
@@ -66,15 +68,15 @@ func (cfg *Config) configureLogging() {
 	pterm.Warning = *pterm.Error.WithShowLineNumber().WithLineNumberOffset(1)
 
 	pterm.Error.Prefix = pterm.Prefix{
-		Text:  "::error ",
+		Text:  "::error::",
 		Style: &pterm.Style{},
 	}
 	pterm.Debug.Prefix = pterm.Prefix{
-		Text:  "::debug ",
+		Text:  "::debug::",
 		Style: &pterm.Style{},
 	}
 	pterm.Warning.Prefix = pterm.Prefix{
-		Text:  "::warning ",
+		Text:  "::warning::",
 		Style: &pterm.Style{},
 	}
 	pterm.Success.Printfln("configureLogging() success")
@@ -195,9 +197,8 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 		}
 
 		outputKey := item.OutputVariable
-		pterm.Debug.Printfln("%q: Set output %q to value in %q", item.SecretPath, outputKey, item.SecretKey)
 
-		if err := ActionsExportVariable(envFile, outputKey, val); err != nil { // TODO: this needs to be correctly set to use the right output variable.
+		if err := ActionExportVariable(envFile, outputKey, val); err != nil { // TODO: this needs to be correctly set to use the right output variable.
 			pterm.Error.Printfln("%q: unable to export env variable: %v", outputKey, err)
 			return fmt.Errorf("cannot set environment variable")
 		}
@@ -315,7 +316,7 @@ func ActionsOpenEnvFile(cfg *Config) (*os.File, error) {
 	return envFile, nil
 }
 
-func ActionsExportVariable(envFile *os.File, key, val string) error {
+func ActionExportVariable(envFile *os.File, key, val string) error {
 	pterm.Info.Println("actionsExportVariable()")
 	if _, err := envFile.WriteString(fmt.Sprintf("%s=%s\n", strings.ToUpper(key), val)); err != nil {
 		return fmt.Errorf("could not update %s environment file: %w", envFile.Name(), err)
