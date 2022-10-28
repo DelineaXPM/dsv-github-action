@@ -58,27 +58,16 @@ func (cfg *Config) getGithubEnv() (string, error) {
 	return githubenv, nil
 }
 
-// configure Pterm settings for project based on the detected environment.
+// configureLogging configures Pterm settings for project.
 // GitHub documents their special syntax here: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
-func (cfg *Config) configureLogging() {
+func configureLogging() {
 	pterm.Info.Println("configureLogging()")
 
 	pterm.Error = *pterm.Error.WithShowLineNumber().WithLineNumberOffset(1) //nolint:reassign // changing prefix later, not an issue.
-	pterm.Warning = *pterm.Warning.WithShowLineNumber().WithLineNumberOffset(1)
-	pterm.Warning = *pterm.Error.WithShowLineNumber().WithLineNumberOffset(1)
 
-	pterm.Error.Prefix = pterm.Prefix{
-		Text:  "::error::",
-		Style: &pterm.Style{},
-	}
-	pterm.Debug.Prefix = pterm.Prefix{
-		Text:  "::debug::",
-		Style: &pterm.Style{},
-	}
-	pterm.Warning.Prefix = pterm.Prefix{
-		Text:  "::warning::",
-		Style: &pterm.Style{},
-	}
+	pterm.Error.Prefix = pterm.Prefix{Text: "::error::", Style: &pterm.Style{}}
+	pterm.Debug.Prefix = pterm.Prefix{Text: "::debug::", Style: &pterm.Style{}}
+
 	pterm.Success.Printfln("configureLogging() success")
 }
 
@@ -111,15 +100,11 @@ func (cfg *Config) sendRequest(c HTTPClient, req *http.Request, out any) error {
 }
 
 func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring in future to break it apart more, but leaving as is at this time.
-	var err error
-	var retrievedValues []SecretToRetrieve
+	configureLogging()
 
 	cfg := Config{}
-	cfg.configureLogging()
-
-	if err := env.Parse(&cfg, env.Options{
-		// Prefix: "DSV_",.
-	}); err != nil {
+	err := env.Parse(&cfg)
+	if err != nil {
 		pterm.Error.Printfln("env.Parse() %+v", err)
 		return fmt.Errorf("unable to parse env vars: %w", err)
 	}
@@ -143,7 +128,7 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 		pterm.Debug.Printfln("RetrieveEnv     : %v", cfg.RetrieveEnv)
 	}
 
-	retrievedValues, err = ParseRetrieve(cfg.RetrieveEnv)
+	retrievedValues, err := ParseRetrieve(cfg.RetrieveEnv)
 	if err != nil {
 		pterm.Error.Printfln("run failure: %v", err)
 		return err
@@ -157,13 +142,12 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 		pterm.Error.Printfln("authentication failure: %v", err)
 		return fmt.Errorf("unable to get access token")
 	}
-	var envFile *os.File
 
-	// This function will only run if both is CI and SetEnv is detected.
+	var envFile *os.File
 	if cfg.IsCI {
 		envFile, err = ActionsOpenEnvFile(&cfg)
 		if err != nil {
-			pterm.Error.Printfln("unable to run actionsopenEnvFile: %v", err)
+			pterm.Error.Printfln("ActionsOpenEnvFile(): %v", err)
 			return err
 		}
 		defer envFile.Close()
