@@ -142,13 +142,12 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 		pterm.Error.Printfln("authentication failure: %v", err)
 		return fmt.Errorf("unable to get access token")
 	}
-	var envFile *os.File
 
-	// This function will only run if both is CI and SetEnv is detected.
+	var envFile *os.File
 	if cfg.IsCI {
 		envFile, err = ActionsOpenEnvFile(&cfg)
 		if err != nil {
-			pterm.Error.Printfln("unable to run actionsopenEnvFile: %v", err)
+			pterm.Error.Printfln("ActionsOpenEnvFile(): %v", err)
 			return err
 		}
 		defer envFile.Close()
