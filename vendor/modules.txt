@@ -1,7 +1,7 @@
 # atomicgo.dev/cursor v0.1.1
 ## explicit; go 1.15
 atomicgo.dev/cursor
-# atomicgo.dev/keyboard v0.2.8
+# atomicgo.dev/keyboard v0.2.9
 ## explicit; go 1.15
 atomicgo.dev/keyboard
 atomicgo.dev/keyboard/internal
@@ -48,7 +48,7 @@ github.com/matryer/is
 # github.com/mattn/go-runewidth v0.0.14
 ## explicit; go 1.9
 github.com/mattn/go-runewidth
-# github.com/pterm/pterm v0.12.49
+# github.com/pterm/pterm v0.12.54
 ## explicit; go 1.18
 github.com/pterm/pterm
 github.com/pterm/pterm/internal
@@ -83,7 +83,7 @@ golang.org/x/sys/windows
 # golang.org/x/term v0.1.0
 ## explicit; go 1.17
 golang.org/x/term
-# golang.org/x/text v0.4.0
+# golang.org/x/text v0.6.0
 ## explicit; go 1.17
 golang.org/x/text/cases
 golang.org/x/text/internal
