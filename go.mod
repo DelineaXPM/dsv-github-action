@@ -6,7 +6,7 @@ require (
 	github.com/bitfield/script v0.20.2
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/magefile/mage v1.14.0
-	github.com/matryer/is v1.4.0
+	github.com/matryer/is v1.4.1
 	github.com/pterm/pterm v0.12.54
 	github.com/sheldonhull/magetools v1.0.0
 )
