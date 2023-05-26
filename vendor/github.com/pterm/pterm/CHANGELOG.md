@@ -2,6 +2,61 @@
 ## [Unreleased]
 
 ### Bug Fixes
+- fixed not being able to add a custom graceful shutdown
+
+
+<a name="v0.12.61"></a>
+## [v0.12.61] - 2023-05-14
+### Bug Fixes
+- **table:** fixed table when a column contained a whitespace at the start or end
+
+
+<a name="v0.12.60"></a>
+## [v0.12.60] - 2023-05-11
+### Features
+- **progressbar:** various progressbar improvements
+- **progressbar:** various progressbar improvements
+- **progressbar:** various progressbar improvements
+- **rgb:** added RGBStyle
+
+### Test
+- **rgb:** added RGBStyle tests
+
+### Code Refactoring
+- **rgb:** removed 'GetValues' for 'RGBStyle'
+
+
+<a name="v0.12.59"></a>
+## [v0.12.59] - 2023-04-15
+### Features
+- add optional mask to InteractiveTextInputPrinter
+
+
+<a name="v0.12.58"></a>
+## [v0.12.58] - 2023-04-03
+### Features
+- **logger:** implemented structured logging
+- **logger:** implemented structured logging
+- **logger:** implemented structured logging
+- **logger:** added logger
+- **logger:** create logger
+- **rgb:** made it possible to use RGB colors as background
+- **rgb:** made it possible to use RGB colors as background
+- **rgb:** made it possible to use RGB colors as background
+
+### Bug Fixes
+- **rgb:** fix Fade maxValue == current not displaying the last color
+
+
+<a name="v0.12.57"></a>
+## [v0.12.57] - 2023-03-28
+### Code Refactoring
+- use `pterm.Print` instead of `fmt.Print` functions
+
+
+<a name="v0.12.56"></a>
+## [v0.12.56] - 2023-03-14
+### Bug Fixes
 - **table:** fixed panic when multiple lines contained color in a single row
 
 
@@ -1128,7 +1183,13 @@ removed `Header` and put it's content directly into `HeaderPrinter`
 - initial commit
 
 
-[Unreleased]: https://github.com/pterm/pterm/compare/v0.12.55...HEAD
+[Unreleased]: https://github.com/pterm/pterm/compare/v0.12.61...HEAD
+[v0.12.61]: https://github.com/pterm/pterm/compare/v0.12.60...v0.12.61
+[v0.12.60]: https://github.com/pterm/pterm/compare/v0.12.59...v0.12.60
+[v0.12.59]: https://github.com/pterm/pterm/compare/v0.12.58...v0.12.59
+[v0.12.58]: https://github.com/pterm/pterm/compare/v0.12.57...v0.12.58
+[v0.12.57]: https://github.com/pterm/pterm/compare/v0.12.56...v0.12.57
+[v0.12.56]: https://github.com/pterm/pterm/compare/v0.12.55...v0.12.56
 [v0.12.55]: https://github.com/pterm/pterm/compare/v0.12.54...v0.12.55
 [v0.12.54]: https://github.com/pterm/pterm/compare/v0.12.53...v0.12.54
 [v0.12.53]: https://github.com/pterm/pterm/compare/v0.12.52...v0.12.53
