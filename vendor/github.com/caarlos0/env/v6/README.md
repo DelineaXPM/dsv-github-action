@@ -435,8 +435,8 @@ type Config struct {
 
 func main() {
 	var cfg = Config{
-		Username: "test",
-		Password: "123456",
+		Username: "ExampleUsername",
+		Password: "ExamplePassword12#",
 	}
 
 	if err := env.Parse(&cfg); err != nil {
