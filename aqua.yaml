@@ -3,21 +3,21 @@
 # https://aquaproj.github.io/
 registries:
   - type: standard
-    ref: v3.138.0 # renovate: depName=aquaproj/aqua-registry
+    ref: v3.162.0 # renovate: depName=aquaproj/aqua-registry
 packages:
-  - name: miniscruff/changie@v1.11.1
-  - name: golang/go@go1.20.1
-  - name: direnv/direnv@v2.32.2
-  - name: magefile/mage@v1.14.0
-  - name: charmbracelet/glow@v1.5.0
-  - name: goreleaser/goreleaser@v1.15.2
-  - name: mvdan/gofumpt@v0.4.0
-  - name: golang.org/x/tools/gopls@v0.11.0
-  - name: golang/tools/gorename@v0.6.0
-  - name: golang/tools/stringer@v0.6.0
-  - name: golang/tools/gomvpkg@v0.6.0
-  - name: golang/tools/godoc@v0.6.0
-  - name: golang/tools/guru@v0.6.0
-  - name: anchore/syft@v0.73.0
-  - name: direnv/direnv@v2.32.2
-  - name: thycotic/dsv-cli@v1.40.1
+  - name: miniscruff/changie@v1.17.0
+  - name: golang/go@go1.21.5
+  - name: direnv/direnv@v2.33.0
+  - name: magefile/mage@v1.15.0
+  - name: charmbracelet/glow@v1.5.1
+  - name: goreleaser/goreleaser@v1.22.1
+  - name: mvdan/gofumpt@v0.5.0
+  - name: golang.org/x/tools/gopls@v0.14.2
+  - name: golang/tools/gorename@v0.16.1
+  - name: golang/tools/stringer@v0.16.1
+  - name: golang/tools/gomvpkg@v0.16.1
+  - name: golang/tools/godoc@v0.16.1
+  - name: golang/tools/guru@v0.16.1
+  - name: anchore/syft@v0.99.0
+  - name: direnv/direnv@v2.33.0
+  - name: thycotic/dsv-cli@v1.40.5
