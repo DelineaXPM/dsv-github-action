@@ -7,12 +7,8 @@ import (
 	"github.com/pterm/pterm"
 )
 
-const (
-	// ExitFailure is exit code sent for failed task.
-	exitFailure = 1
-	// ExitSuccess is exit code sent for running without any error.
-	exitSuccess = 0
-)
+// exitFailure is exit code sent for failed task.
+const exitFailure = 1
 
 //nolint:gochecknoglobals // ok for providing as version output
 var (
@@ -29,5 +25,4 @@ func main() {
 		os.Exit(exitFailure)
 	}
 	pterm.Success.Println("complete with success")
-	os.Exit(exitSuccess)
 }
