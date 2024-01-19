@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	env "github.com/caarlos0/env/v6"
+	env "github.com/caarlos0/env/v10"
 	"github.com/pterm/pterm"
 )
 
@@ -34,6 +34,7 @@ type Config struct {
 }
 
 // SecretToRetrieve defines JSON format of elements that expected in DSV_RETRIEVE list.
+//
 //nolint:tagliatelle // Here 'camel' casing is used instead of 'kebab'.
 type SecretToRetrieve struct {
 	SecretPath     string `json:"secretPath"`
@@ -161,7 +162,7 @@ func Run() error { //nolint:funlen,cyclop // funlen: this could use refactoring 
 			return fmt.Errorf("unable to get secret")
 		}
 
-		secretData, ok := secret["data"].(map[string]interface{})
+		secretData, ok := secret["data"].(map[string]any)
 		if !ok {
 			pterm.Error.Printfln("%q: Cannot get data from secret", item)
 			return fmt.Errorf("cannot parse secret")
@@ -219,7 +220,7 @@ func DSVGetToken(c HTTPClient, apiEndpoint string, cfg *Config) (string, error) 
 		return "", fmt.Errorf("could not build request: %w", err)
 	}
 
-	resp := make(map[string]interface{})
+	resp := make(map[string]any)
 	if err = cfg.sendRequest(c, req, &resp); err != nil {
 		return "", fmt.Errorf("API call failed: %w", err)
 	}
@@ -236,7 +237,7 @@ func DSVGetSecret(
 	apiEndpoint, accessToken string,
 	item SecretToRetrieve,
 	cfg *Config,
-) (map[string]interface{}, error) {
+) (map[string]any, error) {
 	pterm.Info.Println("dsvGetSecret()")
 	// Endpoint := apiEndpoint + "/secrets/" + secretPath.
 	endpoint, err := url.JoinPath(apiEndpoint, "secrets", item.SecretPath)
@@ -252,7 +253,7 @@ func DSVGetSecret(
 
 	req.Header.Set("Authorization", accessToken)
 
-	resp := make(map[string]interface{})
+	resp := make(map[string]any)
 	if err = cfg.sendRequest(client, req, &resp); err != nil {
 		pterm.Debug.Printfln("cfg.sendRequest() failure on sending request endpoint:%q req:%+v", endpoint, req)
 

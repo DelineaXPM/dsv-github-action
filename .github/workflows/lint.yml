@@ -10,9 +10,9 @@ on:
   workflow_call: # so composite actions can use this
 
 permissions:
-  pull-requests: write
-  checks: write
+  pull-requests: read
   contents: read
+  checks: write
 jobs:
   lint:
     uses: delineaxpm/github-workflows/.github/workflows/lint.yml@main

@@ -9,29 +9,29 @@ actions:
 version: 0.1
 runtimes:
   enabled:
-    - node@16.14.2
-    - python@3.10.3
-    - go@1.19 # make sure this matches what's in go.mod for this to work correctly.
+    - node@21.6.0
+    - python@3.11
+    - go@1.21.6 # make sure this matches what's in go.mod for this to work correctly.
 cli:
-  version: 1.0.1
+  version: 1.19.0
 plugins:
   sources:
     - id: trunk
-      ref: v0.0.5
+      ref: v1.2.1
       uri: https://github.com/trunk-io/plugins
 lint:
   enabled:
-    - actionlint@1.6.21
+    - actionlint@1.6.26
     - git-diff-check@SYSTEM
-    - gitleaks@8.15.0
+    - gitleaks@8.18.1
     - gofmt@1.16.7
-    - golangci-lint@1.50.0
-    - hadolint@2.10.0
-    - markdownlint@0.32.2
-    - prettier@2.7.1
-    - shellcheck@0.8.0
+    - golangci-lint@1.55.2
+    - hadolint@2.12.0
+    - markdownlint@0.38.0
+    - prettier@3.2.4
+    - shellcheck@0.9.0
     - shfmt@3.5.0
-    - taplo@release-taplo-cli-0.7.0
+    - taplo@0.8.1
     - yamllint@1.28.0
   threshold:
     - linters: [markdownlint]

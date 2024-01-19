@@ -18,7 +18,7 @@ This project uses an different approach to release, driving it from changelog an
 ### Creating New Notes
 
 - During development, new changes of note get tracked via `changie new`. This can span many pull requests, whatever makes sense as version to ship as changes to users.
-- To release the changes into a version, `changie batch <major|minor|patch>` (unless breaking changes occur, you'll want to stick with minor for feature additions, and patch for fixes or non app work.
+- To release the changes into a version, `changie batch <major|minor|patch>` (unless breaking changes occur, you'll want to stick with minor for feature additions, and patch for fixes or non app work).
 
 Keep your summary of changes that users would care about in the `.changes/` files it will create.
 

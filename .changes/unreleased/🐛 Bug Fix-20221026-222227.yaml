@@ -1,9 +1,0 @@
----
-kind: 🐛 Bug Fix
-body: Adjust log prefix used in the GitHub action to improve the integration with actions and error identification.
-time: 2022-10-26T22:22:27.074552+03:00
-custom:
-  azure-boards-workitemid-fixed: ''
-  azure-boards-workitemid-related: ''
-  github-contributor: ''
-  github-link: ''

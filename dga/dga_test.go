@@ -229,7 +229,7 @@ func TestDsvGetSecret(t *testing.T) {
 		apiEndpoint    string
 		accessToken    string
 		itemToRetrieve dga.SecretToRetrieve
-		want           map[string]interface{}
+		want           map[string]any
 		wantErr        bool
 	}{
 		{
@@ -250,9 +250,7 @@ func TestDsvGetSecret(t *testing.T) {
 				SecretPath: "folder1/secret1",
 				SecretKey:  "key",
 			},
-			want: map[string]interface{}{
-				"key": "val",
-			},
+			want:    map[string]any{"key": "val"},
 			wantErr: false,
 		},
 		{
