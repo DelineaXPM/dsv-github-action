@@ -21,7 +21,15 @@ jobs:
         uses: magnetikonline/action-golang-cache@777394c89f8ed6fcf1649505277c46c1cd06494d # v4
         with:
           go-version-file: go.mod
-
+      # https://github.com/magnetikonline/action-golang-
+      - uses: aquaproj/aqua-installer@61e2563dfe7674cbf74fe6ec212e444198a3bb00 # tag=v2.0.2
+        with:
+          aqua_version: v1.38.0
+          enable_aqua_install: true
+          aqua_opts: '--tags release'
+        env:
+          AQUA_LOG_LEVEL: debug
+          AQUA_OPTS: ''
       - name: mage-tidy
         uses: magefile/mage-action@6a5dcb5fe61f43d7c08a98bc3cf9bc63c308c08e # v3
         with:
