@@ -14,26 +14,26 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       # https://github.com/magnetikonline/action-golang-cache
       - name: Setup Golang with cache
-        uses: magnetikonline/action-golang-cache@797f193169d3c8ba6f60d90f50ecdadd2583fbd8 # v3
+        uses: magnetikonline/action-golang-cache@777394c89f8ed6fcf1649505277c46c1cd06494d # v4
         with:
           go-version-file: go.mod
 
       - name: mage-tidy
-        uses: magefile/mage-action@a3d5bb52942181c125118a2be4b4664c3337aef6 # v2
+        uses: magefile/mage-action@6a5dcb5fe61f43d7c08a98bc3cf9bc63c308c08e # v3
         with:
           version: latest
           args: init
       - name: docker-login
-        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3
         with:
           username: ${{ secrets.DSV_DOCKER_USERNAME }}
           password: ${{ secrets.DSV_DOCKER_PASSWORD }}
       - name: mage-release
-        uses: magefile/mage-action@a3d5bb52942181c125118a2be4b4664c3337aef6 # v2
+        uses: magefile/mage-action@6a5dcb5fe61f43d7c08a98bc3cf9bc63c308c08e # v3
         with:
           version: latest
           args: release
