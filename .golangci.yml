@@ -143,6 +143,7 @@ linters:
     - rowserrcheck # disabled due to generics, can enable in future if needed
     - sqlclosecheck # disabled due to generics, can enable in future if needed
     - wastedassign # disabled due to generics, can enable in future if needed
+    - depguard # using requires fixes to avoid failures on current imports 
 run:
   skip-dirs-use-default: true
   skip-dirs:
