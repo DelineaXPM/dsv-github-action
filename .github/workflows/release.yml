@@ -22,7 +22,7 @@ jobs:
         with:
           go-version-file: go.mod
       # https://github.com/magnetikonline/action-golang-
-      - uses: aquaproj/aqua-installer@61e2563dfe7674cbf74fe6ec212e444198a3bb00 # tag=v2.0.2
+      - uses: aquaproj/aqua-installer@fd2089d1f56724d6456f24d58605e6964deae124 # v2.3.2
         with:
           aqua_version: v2.21.3
           enable_aqua_install: true
@@ -36,7 +36,7 @@ jobs:
           version: latest
           args: init
       - name: docker-login
-        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3
+        uses: docker/login-action@e92390c5fb421da1463c202d546fed0ec5c39f20 # v3
         with:
           username: ${{ secrets.DSV_DOCKER_USERNAME }}
           password: ${{ secrets.DSV_DOCKER_PASSWORD }}
