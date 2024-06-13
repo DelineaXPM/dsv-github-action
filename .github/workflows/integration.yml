@@ -26,7 +26,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - id: dsv
         # If using as a template outside of the actual repo, you sould reference like this instead:
         # uses: DelineaXPM/dsv-github-action@v1 # renovate: tag=v1
