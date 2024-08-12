@@ -17,3 +17,59 @@ jobs:
   lint:
     uses: delineaxpm/github-workflows/.github/workflows/lint.yml@main
     secrets: inherit
+
+  changie-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for .changes directory
+        id: check_changes_dir
+        run: |
+          if [ ! -d ".changes" ]; then
+            echo "No .changes directory found, skipping changie validation."
+            exit 0
+          fi
+
+      - name: Check for changie entry
+        id: check_changie_entry
+        run: |
+          if [ -z "$(ls -A .changes/unreleased)" ]; then
+            echo "No changie entry found."
+            echo "::set-output name=changie_entry_exists::false"
+          else
+            echo "Changie entry found."
+            echo "::set-output name=changie_entry_exists::true"
+          fi
+
+      - name: Check for no-changie-required or dependencies label
+        id: check_no_changie_label
+        run: |
+          labels=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels")
+          if echo "$labels" | grep -q "no-changie-required"; then
+            echo "no-changie-required label found, skipping changie validation."
+            exit 0
+          fi
+          if echo "$labels" | grep -q "dependencies"; then
+            echo "dependencies label found, skipping changie validation."
+            exit 0
+          fi
+
+      - name: Fail if no changie entry and no-changie-required or dependencies label not present
+        if: steps.check_changie_entry.outputs.changie_entry_exists == 'false'
+        run: |
+          echo "::error::A changie entry was not found and is required on pull requests unless bypassed."
+          exit 1
+
+      - name: Post comment on pull request if validation fails
+        if: failure()
+        run: |
+          comment="A changie entry was not found and is required on pull requests unless bypassed."
+          comments_url=$(jq -r .pull_request.comments_url "$GITHUB_EVENT_PATH")
+          existing_comments=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$comments_url")
+          if echo "$existing_comments" | grep -q "$comment"; then
+            echo "Comment already exists, not posting again."
+          else
+            curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -d "{\"body\": \"$comment\"}" \
+              "$comments_url"
+          fi
