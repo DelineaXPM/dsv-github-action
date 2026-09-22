@@ -2,6 +2,8 @@ module github.com/DelineaXPM/dsv-github-action
 
 go 1.21
 
+toolchain go1.26.8
+
 require (
 	github.com/bitfield/script v0.22.0
 	github.com/caarlos0/env/v10 v10.0.0

@@ -1,0 +1,3 @@
+kind: "🔒 Security"
+body: Bumped the Go toolchain to go1.26.8, resolving Snyk-reported vulnerabilities in the Go standard library (net/http, net/url, os).
+time: 2026-09-22T11:00:00.000000000Z
