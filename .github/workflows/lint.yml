@@ -10,7 +10,7 @@ on:
   workflow_call: # so composite actions can use this
 
 permissions:
-  pull-requests: read
+  pull-requests: write
   contents: read
   checks: write
 jobs:
