@@ -30,6 +30,6 @@ require (
 	golang.org/x/mod v0.40.0 // indirect
 	golang.org/x/sys v0.44.0 // indirect
 	golang.org/x/term v0.16.0 // indirect
-	golang.org/x/text v0.39.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
 	mvdan.cc/sh/v3 v3.7.0 // indirect
 )
